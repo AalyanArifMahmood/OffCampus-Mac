@@ -1,6 +1,7 @@
 import image from './Background1.jpeg'
 import '../../CSS/index.css'
 import React from 'react';
+import '../../CSS/Fading.css'
 
 function Info() {
     return (
@@ -8,7 +9,7 @@ function Info() {
             <div >
                 <section id={"home"}>
                 <img src={image} alt="Nothing" style={{width: '1440px', height: '755px', filter: 'brightness(50%)', boxShadow: '1px 12px 9px #6f6f6f'}}/>
-                    <div style={{textAlign: 'center', position: 'absolute', paddingLeft: '12%',bottom: '35%',paddingRight: '10%', color: 'white'}}>
+                    <div style={{textAlign: 'center', position: 'absolute', paddingLeft: '12%',bottom: '35%',paddingRight: '10%', color: 'white'}} class={"fade-in-text"}>
                         <h1 style={{fontSize: '9vh', fontFamily: 'Newslab, georgia, Bakersville'}}>Find Listings Around Macalester College</h1>
                     </div>
                 </section>
