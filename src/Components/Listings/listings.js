@@ -1,5 +1,4 @@
 import '../../CSS/index.css'
-import image from "../MainPage/Background1.jpeg";
 
 
 
@@ -13,7 +12,6 @@ function Listings() {
                     </section>
                 </div>
             </div>
-            <img src={image} alt="Nothing" style={{width: '1440px', height: '755px', filter: 'brightness(50%)', boxShadow: '1px 12px 9px #6f6f6f'}}/>
             <div className="separator" />
         </>
     );

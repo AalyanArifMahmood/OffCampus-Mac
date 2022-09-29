@@ -14,7 +14,7 @@ ul {
     right: 10px;
     background-color: #000000;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 .desktop-navigation > h2 {
@@ -39,6 +39,7 @@ ul {
     text-decoration: none;
     color: white;
     font-weight: bold;
+
 }
 
 .active {
