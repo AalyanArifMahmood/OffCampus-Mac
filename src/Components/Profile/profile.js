@@ -1,8 +1,8 @@
 import '../../CSS/index.css'
+import React from "react";
 
 
-
-function Profile() {
+export const Profile = React.FunctionComponent = props =>  {
     return (
         <>
             <div style={{position: 'relative'}}>

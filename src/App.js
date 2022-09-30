@@ -7,19 +7,37 @@ import AboutUs from "./Components/About Us/AboutUs";
 import Footnote from "./Components/Footnote/footnote";
 import './CSS/App.css';
 
-function App() {
-    return (
-        <>
-            <Navbar />
-            <br/>
-            <br/>
-            <Info/>
-            <Listings/>
-            <Profile/>
-            <AboutUs/>
-            <Footnote/>
-        </>
-    );
+class App extends React.Component
+{
+    render()
+    {
+        return (
+            <>
+                <Navbar />
+                <br/>
+                <br/>
+                <Info/>
+                <Listings/>
+                <Profile/>
+                <AboutUs/>
+                <Footnote/>
+            </>
+        );
+    }
 }
+// function App() {
+//     return (
+//         <>
+//             <Navbar />
+//             <br/>
+//             <br/>
+//             <Info/>
+//             <Listings/>
+//             <Profile/>
+//             <AboutUs/>
+//             <Footnote/>
+//         </>
+//     );
+// }
 
 export default App;

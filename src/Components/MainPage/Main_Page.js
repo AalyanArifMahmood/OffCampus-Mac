@@ -4,7 +4,7 @@ import React from 'react';
 import '../../CSS/Fading.css'
 import image2 from "../../Resources/MacLogo.png";
 
-function Info() {
+export const Info = React.FunctionComponent = props => {
     return (
         <>
             <div>

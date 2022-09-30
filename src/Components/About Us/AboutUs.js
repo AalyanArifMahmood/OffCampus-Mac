@@ -1,7 +1,8 @@
 import '../../CSS/index.css'
+import React from "react";
 
 
-function AboutUs() {
+export const AboutUs = React.FunctionComponent = props => {
     return (
         <>
             <div style={{position: 'relative'}}>

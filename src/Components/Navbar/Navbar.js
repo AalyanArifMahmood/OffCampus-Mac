@@ -3,7 +3,7 @@ import Scrollspy from 'react-scrollspy';
 import '../../CSS/Navbar.css';
 import image from "../../Resources/MacLogo.png";
 
-export default function Navbar() {
+export const Navbar: React.FunctionComponent<> = props => {
     return (
         <nav className="desktop-navigation" style={{boxShadow: '1px 7px 9px #0f0f0f'}}>
             <div style={{display:'flex'}}>
@@ -21,3 +21,5 @@ export default function Navbar() {
         </nav>
     );
 }
+
+export default Navbar;
