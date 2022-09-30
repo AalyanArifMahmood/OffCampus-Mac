@@ -21,6 +21,11 @@ ul {
     display: none;
 }
 
+.desktop-navigation > img {
+    display: none;
+}
+
+
 .desktop-navigation > ul {
     display: flex;
     margin: 10px 0;
@@ -58,6 +63,11 @@ ul {
     }
 
     .desktop-navigation > h2 {
+        display: block;
+        margin-left: 5%;
+    }
+
+    .desktop-navigation > img {
         display: block;
         margin-left: 5%;
     }
