@@ -2,8 +2,11 @@ import '../../CSS/index.css'
 import React from "react";
 import { PrimaryButton } from '@fluentui/react/lib/Button';
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getDatabase } from "firebase/database";
+// import { getAnalytics } from "firebase/analytics";
+import { getDatabase, ref, set } from "firebase/database";
+import {TextField} from "@fluentui/react";
+import { Stack, IStackProps } from '@fluentui/react/lib/Stack';
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -17,13 +20,18 @@ const firebaseConfig = {
     messagingSenderId: "546109308935",
     appId: "1:546109308935:web:a52c2ee6d7cc1bae822aa2",
     measurementId: "G-7CFVGFQXE8",
-    databaseURL: "https://offcampusatmac.firebaseio.com"
+    databaseURL: "https://offcampusatmac-default-rtdb.firebaseio.com/"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+// const analytics = getAnalytics(app);
 const database = getDatabase(app);
+
+const columnProps: Partial<IStackProps> = {
+    tokens: { childrenGap: 15 },
+    styles: { root: { width: 300, marginLeft: '40%' } },
+};
 
 class Listings extends React.Component{
 
@@ -36,9 +44,18 @@ class Listings extends React.Component{
             }
     }
 
-    updateValue(): boolean
+    updateValue = () =>
     {
         this.setState(prevState => ({checked: !prevState.checked}));
+    }
+
+    writeUserData() {
+        set(ref(database, document.getElementById("addressBox").value), {
+            name: document.getElementById("nameBox").value,
+            email: document.getElementById("emailBox").value,
+            address: document.getElementById("addressBox").value,
+            rent: document.getElementById("rentBox").value
+        });
     }
 
     render()
@@ -51,8 +68,15 @@ class Listings extends React.Component{
                             <h1 style={{fontSize: '6vh', fontFamily: 'Newslab, georgia, Bakersville', color: '#01426A'}}>Available Listings</h1>
                         </section>
                     </div>
-                    <PrimaryButton text="Primary" onClick={this.updateValue()} style={{backgroundColor: this.state.checked ? "red" : "blue"}} allowDisabledFocus />
                 </div>
+                <Stack {...columnProps}>
+                    <TextField label="Name " required errorMessage="" id={"nameBox"}/>
+                    <TextField label="Listing Address" required errorMessage="" id={"addressBox"} />
+                    <TextField label="Contact Email" required errorMessage=""  mask="m\ask: @macalester.edu" id={"emailBox"}/>
+                    <TextField label="Rent" required errorMessage="" id={"rentBox"}/>
+                </Stack>
+                <br/>
+                <PrimaryButton text="Add Listing" onClick={this.writeUserData} style={{marginLeft: "45%"}}  allowDisabledFocus />
                 <div className="separator" />
             </>
         );

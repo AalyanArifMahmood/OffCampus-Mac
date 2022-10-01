@@ -10,7 +10,7 @@ export const Info = React.FunctionComponent = props => {
             <div>
                 <section id={"home"}>
                 <img src={image} alt="Nothing" style={{width: '100%', height: '100%', filter: 'brightness(40%)', boxShadow: '1px 12px 9px #6f6f6f'}}/>
-                    <div style={{display: 'flex', textAlign: 'center', position: 'absolute', paddingLeft: '12%',bottom: '21%', paddingRight: '10%', color: 'white'}} class={"fade-in-text"}>
+                    <div style={{display: 'flex', textAlign: 'center', position: 'absolute', paddingLeft: '12%',bottom: '21%', paddingRight: '10%', color: 'white'}} className={"fade-in-text"}>
                         <img src={image2} alt="Nothing" style={{height: '30%', width: '30%'}}/>
                         <h1 style={{marginTop: '8%', fontSize: '9vh', fontFamily: 'Newslab, georgia, Bakersville'}}>Find Listings Around Macalester College</h1>
                     </div>
