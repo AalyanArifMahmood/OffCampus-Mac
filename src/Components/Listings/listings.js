@@ -1,11 +1,9 @@
 import '../../CSS/index.css'
 import React from "react";
-import { PrimaryButton } from '@fluentui/react/lib/Button';
 import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
 import { getDatabase, ref, set } from "firebase/database";
-import {TextField} from "@fluentui/react";
-import { Stack, IStackProps } from '@fluentui/react/lib/Stack';
+
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -28,11 +26,6 @@ const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 const database = getDatabase(app);
 
-const columnProps: Partial<IStackProps> = {
-    tokens: { childrenGap: 15 },
-    styles: { root: { width: 300, marginLeft: '40%' } },
-};
-
 class Listings extends React.Component{
 
     constructor(props)
@@ -49,15 +42,6 @@ class Listings extends React.Component{
         this.setState(prevState => ({checked: !prevState.checked}));
     }
 
-    writeUserData() {
-        set(ref(database, document.getElementById("addressBox").value), {
-            name: document.getElementById("nameBox").value,
-            email: document.getElementById("emailBox").value,
-            address: document.getElementById("addressBox").value,
-            rent: document.getElementById("rentBox").value
-        });
-    }
-
     render()
     {
         return (
@@ -69,14 +53,6 @@ class Listings extends React.Component{
                         </section>
                     </div>
                 </div>
-                <Stack {...columnProps}>
-                    <TextField label="Name " required errorMessage="" id={"nameBox"}/>
-                    <TextField label="Listing Address" required errorMessage="" id={"addressBox"} />
-                    <TextField label="Contact Email" required errorMessage=""  mask="m\ask: @macalester.edu" id={"emailBox"}/>
-                    <TextField label="Rent" required errorMessage="" id={"rentBox"}/>
-                </Stack>
-                <br/>
-                <PrimaryButton text="Add Listing" onClick={this.writeUserData} style={{marginLeft: "45%"}}  allowDisabledFocus />
                 <div className="separator" />
             </>
         );
