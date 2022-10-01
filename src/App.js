@@ -5,6 +5,7 @@ import Listings from './Components/Listings/listings'
 import Profile from './Components/Profile/profile'
 import AboutUs from "./Components/About Us/AboutUs";
 import Footnote from "./Components/Footnote/footnote";
+import AddListings from "./Components/Listings/AddListing";
 import './CSS/App.css';
 
 class App extends React.Component
@@ -20,6 +21,7 @@ class App extends React.Component
                 <Listings/>
                 <Profile/>
                 <AboutUs/>
+                <AddListings/>
                 <Footnote/>
             </>
         );
