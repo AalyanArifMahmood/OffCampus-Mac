@@ -20,8 +20,8 @@ class App extends React.Component
                 <Info/>
                 <Listings/>
                 <Profile/>
-                <AboutUs/>
                 <AddListings/>
+                <AboutUs/>
                 <Footnote/>
             </>
         );

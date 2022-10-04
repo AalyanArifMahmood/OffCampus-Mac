@@ -16,8 +16,8 @@ export const Navbar: React.FunctionComponent<> = props => {
                 <li><a href="#home">Home</a></li>
                 <li><a href="#listings">Listings</a></li>
                 <li><a href="#profile">Profile</a></li>
-                <li><a href="#aboutus">About</a></li>
                 <li><a href="#addListing">Add Listing</a></li>
+                <li><a href="#aboutus">About</a></li>
             </Scrollspy>
         </nav>
     );
