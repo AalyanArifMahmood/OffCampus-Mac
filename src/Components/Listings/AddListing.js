@@ -69,7 +69,7 @@ class AddListings extends React.Component{
                 <div style={{position: 'relative'}}>
                     <div style={{textAlign: 'center',  paddingLeft: '10%',bottom: '35%',paddingRight: '10%'}}>
                         <section id={"addListing"}>
-                            <h1 style={{fontSize: '6vh', fontFamily: 'Newslab, georgia, Bakersville', color: '#01426A'}}>Add a Listing</h1>
+                            <h1 style={{fontSize: '6vh', fontFamily: 'Newslab, georgia, Bakersville', color: '#000000'}}>Add a Listing</h1>
                         </section>
                     </div>
                 </div>
