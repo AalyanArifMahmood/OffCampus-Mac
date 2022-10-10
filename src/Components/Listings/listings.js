@@ -1,15 +1,11 @@
 import '../../CSS/index.css'
-import React from "react";
+import * as React from 'react';
 import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics";
-import { getDatabase, ref, set } from "firebase/database";
+import {getDatabase, onValue, ref} from "firebase/database";
+import { getTheme, mergeStyleSets } from '@fluentui/react/lib/Styling';
+import { ScrollablePane, IScrollablePaneStyles } from '@fluentui/react/lib/ScrollablePane';
+import {PrimaryButton} from "@fluentui/react/lib/Button";
 
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
     apiKey: "AIzaSyCxyu7ou0WSzQYk63StiYtCVG-XtUPpqNs",
     authDomain: "offcampusatmac.firebaseapp.com",
@@ -21,20 +17,55 @@ const firebaseConfig = {
     databaseURL: "https://offcampusatmac-default-rtdb.firebaseio.com/"
 };
 
-// Initialize Firebase
+const theme = getTheme();
+
 const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
 const database = getDatabase(app);
 
-class Listings extends React.Component{
+export interface IScrollablePaneExampleItem {
+    color: string;
+    text: string;
+    index: number;
+}
 
+const classNames = mergeStyleSets({
+    wrapper: {
+        height: '40vh',
+        position: 'relative',
+        maxHeight: 'inherit',
+    },
+    pane: {
+        maxWidth: 1400,
+        border: '1px solid ' + theme.palette.black
+    },
+    textContent: {
+        padding: '15px 10px',
+    },
+});
+
+const scrollablePaneStyles: Partial<IScrollablePaneStyles> = { root: classNames.pane };
+
+
+class Listings extends React.Component{
     constructor(props)
     {
         super(props);
         this.state =
             {
-                checked: true
+                checked: true,
+                listings: []
             }
+    }
+
+    readUserData = () =>
+    {
+        const starCountRef = ref(database, 'items');
+        onValue(starCountRef, (snapshot) => {
+            snapshot.forEach(function(childSnapshot)
+            {
+                this.state.listings.push(childSnapshot.val());
+            })
+        });
     }
 
     updateValue = () =>
@@ -51,6 +82,12 @@ class Listings extends React.Component{
                         <section id={"listings"}>
                             <h1 style={{fontSize: '6vh', fontFamily: 'Newslab, georgia, Bakersville', color: '#000000'}}>Available Listings</h1>
                         </section>
+                        <PrimaryButton text="Add Listing" onClick={this.readUserData} style={{marginLeft: "45%"}}  allowDisabledFocus />
+                        <div className={classNames.wrapper}>
+                            <ScrollablePane scrollContainerFocus={true} scrollContainerAriaLabel="Sticky component example" styles={scrollablePaneStyles}>
+                                {this.state.listings}
+                            </ScrollablePane>
+                        </div>
                     </div>
                 </div>
                 <div className="separator" />
