@@ -1,10 +1,13 @@
 import '../../CSS/index.css'
 import * as React from "react";
+import SingleList from "./SingleListingDisplay";
 import { PrimaryButton } from '@fluentui/react/lib/Button';
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, onValue } from "firebase/database";
 import {TextField} from "@fluentui/react";
 import { Stack, IStackProps } from '@fluentui/react/lib/Stack';
+import { ScrollablePane, IScrollablePaneStyles } from '@fluentui/react/lib/ScrollablePane';
+import {getTheme, mergeStyleSets} from "@fluentui/react/lib/Styling";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCxyu7ou0WSzQYk63StiYtCVG-XtUPpqNs",
@@ -28,14 +31,48 @@ const columnProps: Partial<IStackProps> = {
 };
 
 
-// This is where the class starts
+export interface IScrollablePaneExampleItem {
+    address: string;
+    name: string;
+    rent: number;
+    email: string;
+}
+const theme = getTheme();
+const classNames = mergeStyleSets({
+    wrapper: {
+        height: '40vh',
+        position: 'relative',
+        maxHeight: 'inherit',
+    },
+    pane: {
+        maxWidth: 400,
+        border: '1px solid ' + theme.palette.neutralLight
+    },
+    textContent: {
+        padding: '15px 10px',
+    },
+});
+
+const scrollablePaneStyles: Partial<IScrollablePaneStyles> = { root: classNames.pane };
+
+const createContentArea = (item: IScrollablePaneExampleItem) => (
+    <div >
+        <div className={classNames.textContent} style={{backgroundColor: 'gray'}}>
+            <SingleList address={item.address} name={item.name} rent={item.rent} email={item.email}/>
+        </div>
+    </div>
+);
+
+
+// **************************************   This is where the class starts   *******************************************
 class AddListings extends React.Component
 {
     constructor() {
         super();
         this.state=
         {
-            listings: []
+            listings: [],
+            able: false
         }
     }
 
@@ -46,12 +83,13 @@ class AddListings extends React.Component
 
     readUserData = () =>
     {
+
         const listRef = ref(database, 'items');
         let tempListings = []
         onValue(listRef, (snapshot) => {
             snapshot.forEach(function(childSnapshot)
             {
-                tempListings.push(childSnapshot.val().name)
+                tempListings.push(childSnapshot.val())
             })
         });
         this.setState(prevState => ({
@@ -60,8 +98,8 @@ class AddListings extends React.Component
     }
 
     writeUserData = () => {
-        if (!(document.getElementById("addressBox").value === "") || !(document.getElementById("nameBox").value === "") ||
-            !(document.getElementById("rentBox").value === "") || !(document.getElementById("emailBox").value === ""))
+        if (!(document.getElementById("addressBox").value === "") && !(document.getElementById("nameBox").value === "") &&
+            !(document.getElementById("rentBox").value === "") && !(document.getElementById("emailBox").value === ""))
         {
             set(ref(database, 'items/' + document.getElementById("addressBox").value), {
                 name: document.getElementById("nameBox").value,
@@ -69,72 +107,79 @@ class AddListings extends React.Component
                 address: document.getElementById("addressBox").value,
                 rent: document.getElementById("rentBox").value
             });
+            alert("Success! Please refresh page to see changes!")
         }
     }
 
+    enable = () =>
+    {
+        this.readUserData();
+        this.setState(prevState => ({able: !prevState.able}));
+    }
 
     render()
     {
-        if(this.state.listings.length === 0)
+        if(!this.state.able)
         {
-         return (
-             <>
-                 <div style={{position: 'relative'}}>
-                     <div style={{textAlign: 'center', paddingLeft: '10%', bottom: '35%', paddingRight: '10%'}}>
-                         <section id={"listings"}>
-                             <h1 style={{
-                                 fontSize: '6vh',
-                                 fontFamily: 'Newslab, georgia, Bakersville',
-                                 color: '#000000'
-                             }}>Available Listings</h1>
-                         </section>
+            // *********************************************   BEFORE RE RENDER   **************************************
+             return (
+                 <>
+                     <div style={{position: 'relative'}}>
+                         <div style={{textAlign: 'center', paddingLeft: '10%', bottom: '35%', paddingRight: '10%'}}>
+                             <section id={"listings"}>
+                                 <h1 style={{
+                                     fontSize: '6vh',
+                                     fontFamily: 'Newslab, georgia, Bakersville',
+                                     color: '#000000'
+                                 }}>Available Listings</h1>
+                             </section>
+                             <PrimaryButton text="Show Listings" onClick={this.enable} allowDisabledFocus/>
+                         </div>
                      </div>
-                 </div>
 
-                 <div className="separator"/>
+                     <div className="separator"/>
 
-                 <div style={{position: 'relative'}}>
-                     <div style={{textAlign: 'center', paddingLeft: '10%', bottom: '35%', paddingRight: '10%'}}>
-                         <section id={"addListing"}>
-                             <h1 style={{fontSize: '6vh', fontFamily: 'Newslab, georgia, Bakersville', color: '#000000'}}>Add
-                                 a Listing</h1>
-                         </section>
+                     <div style={{position: 'relative'}}>
+                         <div style={{textAlign: 'center', paddingLeft: '10%', bottom: '35%', paddingRight: '10%'}}>
+                             <section id={"addListing"}>
+                                 <h1 style={{fontSize: '6vh', fontFamily: 'Newslab, georgia, Bakersville', color: '#000000'}}>Add
+                                     a Listing</h1>
+                             </section>
+                         </div>
                      </div>
-                 </div>
-                 <Stack {...columnProps}>
-                     <TextField label="Name " required id={"nameBox"} onGetErrorMessage={value => {
-                         if (value === '') {
-                             return 'This field is required';
-                         }
-                     }}/>
-                     <TextField label="Listing Address" required id={"addressBox"} onGetErrorMessage={value => {
-                         if (value === '') {
-                             return 'This field is required';
-                         }
-                     }}/>
-                     <TextField label="Contact Email" required mask="m\ask: @macalester.edu" id={"emailBox"}
-                                onGetErrorMessage={value => {
-                                    if (value === '') {
-                                        return 'This field is required';
-                                    }
-                                }}/>
-                     <TextField label="Rent" required id={"rentBox"} onGetErrorMessage={value => {
-                         if (value === '') {
-                             return 'This field is required';
-                         }
-                     }}/>
-                 </Stack>
-                 <br/>
-                 <PrimaryButton text="Add Listing" onClick={this.writeUserData} style={{marginLeft: "45%"}} allowDisabledFocus/>
+                     <Stack {...columnProps}>
+                         <TextField label="Name " required id={"nameBox"} onGetErrorMessage={value => {
+                             if (value === '') {
+                                 return 'This field is required';
+                             }
+                         }}/>
+                         <TextField label="Listing Address" required id={"addressBox"} onGetErrorMessage={value => {
+                             if (value === '') {
+                                 return 'This field is required';
+                             }
+                         }}/>
+                         <TextField label="Contact Email" required mask="m\ask: @macalester.edu" id={"emailBox"}
+                                    onGetErrorMessage={value => {
+                                        if (value === '') {
+                                            return 'This field is required';
+                                        }
+                                    }}/>
+                         <TextField label="Rent" required id={"rentBox"} onGetErrorMessage={value => {
+                             if (value === '') {
+                                 return 'This field is required';
+                             }
+                         }}/>
+                     </Stack>
+                     <br/>
+                     <PrimaryButton text="Add Listing" onClick={this.writeUserData} style={{marginLeft: "45%"}} allowDisabledFocus/>
 
-                 <div className="separator"/>
-             </>
-         );
+                     <div className="separator"/>
+                 </>
+             );
+            // *************************************   AFTER RE RENDER  ************************************************
         }
         else
         {
-            console.log(this.state.listings[0])
-            console.log(this.state.listings.length)
             return (
                 <>
                     <div style={{position: 'relative'}}>
@@ -146,9 +191,23 @@ class AddListings extends React.Component
                                     color: '#000000'
                                 }}>Available Listings</h1>
                             </section>
+                            <PrimaryButton text="Hide Listings" onClick={this.enable}  allowDisabledFocus/>
+                            <div >
+                                {/*<ScrollablePane scrollContainerFocus={true} scrollContainerAriaLabel="Sticky component example" styles={scrollablePaneStyles}>*/}
+                                {/*    {this.state.listings.map(createContentArea)}*/}
+                                {/*</ScrollablePane>*/}
+                            </div>
                         </div>
                     </div>
-                    <p>The name is {this.state.listings[0][1]}</p>
+                    <ul>
+                        {this.state.listings[0].map((data) => (
+                            <li key={data.address}>
+                                <SingleList name={data.name} address={data.address} email={data.email} rent={data.rent}/>
+                            </li>
+                            ))}
+                    </ul>
+                    {/*<SingleList name={this.state.listings[0][1].name} rent={this.state.listings[0][0].rent} email={this.state.listings[0][0].email} address={this.state.listings[0][0].address}/>*/}
+                    {/*<SingleList name={this.state.listings[0][1].name} rent={this.state.listings[0][1].rent} email={this.state.listings[0][1].email} address={this.state.listings[0][1].address}/>*/}
                     <div className="separator"/>
 
                     <div style={{position: 'relative'}}>
