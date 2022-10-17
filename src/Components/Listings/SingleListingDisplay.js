@@ -12,6 +12,7 @@ class SingleList extends React.Component
                 <Box bgcolor="white" p={1} border={2} marginRight={10} marginLeft={10}>
                     <div style={{justifyContent: "space-between", display: "flex"}}>
                         <Stack>
+                            <b style={{textAlign: "center", marginLeft: '70%', fontSize: '150%', marginRight: '-70%'}}>{this.props.description}</b>
                             <p><b>Listing Address:</b> {this.props.address} </p>
                             <p><b>Lister's Name:</b> {this.props.name}</p>
                             <p><b>Lister's Contact:</b> {this.props.email}  </p>
