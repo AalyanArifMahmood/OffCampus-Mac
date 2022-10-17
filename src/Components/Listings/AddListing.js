@@ -123,7 +123,8 @@ class AddListings extends React.Component
                 uploadBytes(storageRef, this.state.files[0]).then((snapshot) => {
                     console.log('Uploaded a blob or file!');
                 });
-                set(ref(database, 'items/' + document.getElementById("addressBox").value), {
+                set(ref(database, 'items/' + document.getElementById("descriptionBox").value), {
+                    description: document.getElementById("descriptionBox").value,
                     name: document.getElementById("nameBox").value,
                     email: document.getElementById("emailBox").value + "@macalester.edu",
                     address: document.getElementById("addressBox").value,
@@ -173,6 +174,11 @@ class AddListings extends React.Component
                          </div>
                      </div>
                      <Stack {...columnProps}>
+                         <TextField label="Short Description/Name of Listing" multiline autoAdjustHeight required id={"descriptionBox"} onGetErrorMessage={value => {
+                             if (value === "") {
+                                 return 'This field is required';
+                             }
+                         }}/>
                          <TextField label="Name " required id={"nameBox"} onGetErrorMessage={value => {
                              if (value === "") {
                                  return 'This field is required';
@@ -244,7 +250,7 @@ class AddListings extends React.Component
                     <ul>
                         {this.state.listings[0].map((data) => (
                             <li key={data.address}>
-                                <SingleList name={data.name} address={data.address} email={data.email} rent={data.rent} image={data.photo}/>
+                                <SingleList description={data.description} name={data.name} address={data.address} email={data.email} rent={data.rent} image={data.photo}/>
                             </li>
                             ))}
                     </ul>
@@ -259,6 +265,11 @@ class AddListings extends React.Component
                         </div>
                     </div>
                     <Stack {...columnProps}>
+                        <TextField label="Short Description/Name of Listing" multiline autoAdjustHeight required id={"descriptionBox"} onGetErrorMessage={value => {
+                            if (value === "") {
+                                return 'This field is required';
+                            }
+                        }}/>
                         <TextField label="Name " required id={"nameBox"} onGetErrorMessage={value => {
                             if (value==="") {
                                 return 'This field is required';
