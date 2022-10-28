@@ -1,13 +1,14 @@
 import '../../CSS/index.css'
 import * as React from "react";
 import SingleList from "./SingleListingDisplay";
-import { PrimaryButton } from '@fluentui/react/lib/Button';
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, onValue } from "firebase/database";
-import {TextField} from "@fluentui/react";
-import { Stack, IStackProps } from '@fluentui/react/lib/Stack';
 import { getStorage, ref as reff, uploadBytes, getDownloadURL } from "firebase/storage";
 import {DropzoneDialog} from 'material-ui-dropzone'
+import { Stack, IStackProps, TextField, initializeIcons} from '@fluentui/react';
+import { Dropdown, DropdownMenuItemType, IDropdownOption, IDropdownStyles } from '@fluentui/react/lib/Dropdown';
+import { PrimaryButton } from '@fluentui/react/lib/Button';
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyCxyu7ou0WSzQYk63StiYtCVG-XtUPpqNs",
@@ -20,6 +21,89 @@ const firebaseConfig = {
     databaseURL: "https://offcampusatmac-default-rtdb.firebaseio.com/"
 };
 
+
+// ***********************************************  FILTER SECTION  ****************************************************
+
+
+const dropdownStyles: Partial<IDropdownStyles> = { dropdown: { width: 300 } };
+initializeIcons()
+
+const filterProps = [
+        {
+            key: 'Header1',
+            text: 'Room Filters',
+            itemType: DropdownMenuItemType.Header
+        },
+        {
+            key: 'byRooms1',
+            text: '1 Room'
+        },
+        {
+            key: 'byRooms2',
+            text: '2+ Rooms'
+        },
+        {
+            key: 'byRooms3',
+            text: '3+ Rooms'
+        },
+        {
+            key: 'Header2',
+            text: 'Bathroom Filters',
+            itemType: DropdownMenuItemType.Header
+        },
+        {
+            key: 'byBathrooms1',
+            text: '1 Bathroom'
+        },
+        {
+            key: 'byBathrooms2',
+            text: '2+ Bathrooms'
+        },
+        {
+            key: 'byBathrooms3',
+            text: '3+ Bathrooms'
+        }
+];
+
+const menuProps = [
+
+
+        {
+            key: "blank",
+            text: "Reset"
+
+        },
+        {
+            key: 'FirstHeader',
+            text: 'Rent Sorts',
+            itemType: DropdownMenuItemType.Header
+        },
+        {
+            key: 'byRent',
+            text: 'Rent: Low to High'
+        },
+        {
+            key: 'byRent2',
+            text: 'Rent: High to Low'
+        },
+        {
+            key: 'SecondHeader',
+            text: 'Distance Sorts',
+            itemType: DropdownMenuItemType.Header
+        },
+        {
+            key: 'byDistance',
+            text: 'Distance: Low to High'
+        },
+        {
+            key: '',
+            text: 'Distance: High to Low'
+        }
+];
+
+// ********************************************  FILTER SECTION END ****************************************************
+
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
@@ -27,41 +111,23 @@ const storage = getStorage();
 
 const columnProps: Partial<IStackProps> = {
     tokens: { childrenGap: 15 },
-    styles: { root: { width: 300, marginLeft: '30%' } },
+    styles: { root: { width: 300} },
 };
 
 const columnProps2: Partial<IStackProps> = {
     tokens: { childrenGap: 15 },
-    styles: { root: { width: 300, marginLeft: '5%' } },
+    styles: { root: { width: 300} },
 };
 
 function makeid(length) {
     var result           = '';
     var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
+    for ( let i = 0; i < length; i++ ) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
 }
-
-
-export interface IScrollablePaneExampleItem {
-    address: string;
-    name: string;
-    rent: number;
-    email: string;
-}
-
-// const scrollablePaneStyles: Partial<IScrollablePaneStyles> = { root: classNames.pane };
-//
-// const createContentArea = (item: IScrollablePaneExampleItem) => (
-//     <div >
-//         <div className={classNames.textContent}>
-//             <SingleList address={item.address} name={item.name} rent={item.rent} email={item.email}/>
-//         </div>
-//     </div>
-// );
 
 // **************************************   This is where the class starts   *******************************************
 class AddListings extends React.Component
@@ -74,14 +140,99 @@ class AddListings extends React.Component
             able: false,
             listAddresses: [],
             files: [],
-            open: false
+            open: false,
+            selectedKeys: [],
+            showListings: []
         }
     }
 
     componentDidMount() {
-        this.readUserData()
+        this.readUserData();
     }
 
+    filter = () =>
+    {
+        this.setState(prevState => ({
+            showListings: this.state.listings
+        }))
+        if(this.state.selectedKeys.length === 0)
+        {
+            console.log("reached empty")
+            this.setState(prevState => ({
+                showListings: this.state.listings
+            }))
+        }
+        else
+        {
+            for (let key = 0; key < this.state.selectedKeys.length; key++)
+            {
+                if (this.state.selectedKeys[key] === 'byRooms1')
+                {
+                    this.setState(prevState => ({
+                        showListings: [prevState.showListings[0].filter(function (el)
+                            {
+                                return parseInt(el.numberRooms) === 1;
+                            }
+                        )]
+                    }))
+                }
+                if (this.state.selectedKeys[key] === 'byRooms2')
+                {
+                    this.setState(prevState => ({
+                        showListings: [prevState.showListings[0].filter(function (el)
+                            {
+                                return parseInt(el.numberRooms) >= 2;
+                            }
+                        )]
+                    }))
+                }
+                else if (this.state.selectedKeys[key] === 'byRooms3')
+                {
+                    this.setState(prevState => ({
+                        showListings: [prevState.showListings[0].filter(function (el)
+                            {
+                                return parseInt(el.numberRooms) >= 3;
+                            }
+                        )]
+                    }))
+
+                }
+                else if (this.state.selectedKeys[key] === 'byBathrooms1')
+                {
+                    this.setState(prevState => ({
+                        showListings: [prevState.showListings[0].filter(function (el)
+                            {
+                                return parseInt(el.numberBathrooms) === 1;
+                            }
+                        )]
+                    }))
+                }
+                else if (this.state.selectedKeys[key] === 'byBathrooms2')
+                {
+                    console.log("reached bathroom2")
+                    this.setState(prevState => ({
+                        showListings: [prevState.showListings[0].filter(function (el)
+                            {
+                                return parseInt(el.numberBathrooms) >= 2;
+                            }
+                        )]
+                    }))
+                }
+                else if (this.state.selectedKeys[key] === 'byBathrooms3')
+                {
+                    this.setState(prevState => ({
+                        showListings: [prevState.showListings[0].filter(function (el)
+                            {
+                                return parseInt(el.numberBathrooms) >= 3;
+                            }
+                        )]
+                    }))
+
+                }
+            }
+        }
+
+    }
 
     readUserData = () =>
     {
@@ -98,6 +249,9 @@ class AddListings extends React.Component
         });
         this.setState(prevState => ({
             listings: [...prevState.listings, tempListings]
+        }))
+        this.setState(prevState => ({
+            showListings: [...prevState.showListings, tempListings]
         }))
         this.setState(prevState => ({
             listAddresses: [...prevState.listAddresses, tempAddresses]
@@ -148,7 +302,9 @@ class AddListings extends React.Component
                             address: document.getElementById("addressBox").value,
                             rent: document.getElementById("rentBox").value,
                             photo: url,
-                            details: document.getElementById("detailBox").value
+                            details: document.getElementById("detailBox").value,
+                            numberRooms: document.getElementById("roomBox").value,
+                            numberBathrooms: document.getElementById("bathroomBox").value
                         });
 
                         alert("Success! Please refresh page to see changes!")
@@ -161,13 +317,22 @@ class AddListings extends React.Component
 
     enable = () =>
     {
-        // this.readUserData();
         this.setState(prevState => ({able: !prevState.able}));
+    }
+
+
+    onChange = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption) =>
+    {
+        if (item)
+        {
+            this.setState(prevState => ({
+                selectedKeys: item.selected ? [...prevState.selectedKeys, item.key.toString()] : prevState.selectedKeys.filter(key => key !== item.key)
+            }))
+        }
     }
 
     render()
     {
-        console.log(this.state.files)
         if(!this.state.able)
         {
             // *********************************************   BEFORE RE RENDER   **************************************
@@ -196,7 +361,7 @@ class AddListings extends React.Component
                              </section>
                          </div>
                      </div>
-                     <div style={{display: "flex"}}>
+                     <div style={{display: "flex", justifyContent: "space-evenly"}}>
                          <Stack {...columnProps}>
                              <TextField label="Name of Listing" autoAdjustHeight required id={"descriptionBox"} onGetErrorMessage={value => {
                                  if (value === "") {
@@ -209,6 +374,11 @@ class AddListings extends React.Component
                                  }
                              }} />
                              <TextField label="Listing Address" required id={"addressBox"} onGetErrorMessage={value => {
+                                 if (value==="") {
+                                     return 'This field is required';
+                                 }
+                             }}/>
+                             <TextField label="Number Of Rooms" required id={"roomBox"} onGetErrorMessage={value => {
                                  if (value==="") {
                                      return 'This field is required';
                                  }
@@ -228,6 +398,11 @@ class AddListings extends React.Component
                              }}/>
                              <TextField label="Short Paragraph for Details" multiline autoAdjustHeight required id={"detailBox"} onGetErrorMessage={value => {
                                  if (value === "") {
+                                     return 'This field is required';
+                                 }
+                             }}/>
+                             <TextField label="Number Of Bathrooms" required id={"bathroomBox"} onGetErrorMessage={value => {
+                                 if (value==="") {
                                      return 'This field is required';
                                  }
                              }}/>
@@ -260,6 +435,9 @@ class AddListings extends React.Component
         }
         else
         {
+            console.log(this.state.selectedKeys)
+            console.log("************")
+            console.log(this.state.showListings)
             return (
                 <>
                     <div style={{position: 'relative'}}>
@@ -279,10 +457,42 @@ class AddListings extends React.Component
                             {/*</div>*/}
                         </div>
                     </div>
+                    <div style={{display: "flex", justifyContent: "space-evenly"}}>
+
+                        <div>
+                            <Dropdown
+                                placeholder="Filter by"
+                                label="Filter Listings"
+                                selectedKeys={this.state.selectedKeys}
+                                // eslint-disable-next-line react/jsx-no-bind
+                                onChange={this.onChange}
+                                multiSelect
+                                options={filterProps}
+                                styles={dropdownStyles}
+                            />
+                            <br/>
+                            <PrimaryButton text="Set Filter" onClick={this.filter}  allowDisabledFocus style={{marginLeft: "7vw"}}/>
+                        </div>
+
+                        <div>
+                        <Dropdown
+                            placeholder="Sort By"
+                            label="Sort Listings"
+                            // selectedKeys={this.state.selectedKeys}
+                            // eslint-disable-next-line react/jsx-no-bind
+                            onChange={this.onChange}
+                            options={menuProps}
+                            styles={dropdownStyles}
+                        />
+                            <br/>
+                            <PrimaryButton text="Set Sort" onClick={this.filter}  allowDisabledFocus style={{marginLeft: "7vw"}}/>
+                        </div>
+
+                    </div>
                     <ul>
-                        {this.state.listings[0].map((data) => (
+                        {this.state.showListings[0].map((data) => (
                             <li key={data.address}>
-                                <SingleList description={data.description} name={data.name} address={data.address} email={data.email} rent={data.rent} image={data.photo} details={data.details}/>
+                                <SingleList description={data.description} name={data.name} address={data.address} email={data.email} rent={data.rent} image={data.photo} details={data.details} rooms={data.numberRooms} bathrooms={data.numberBathrooms}/>
                             </li>
                             ))}
                     </ul>
@@ -296,7 +506,7 @@ class AddListings extends React.Component
                             </section>
                         </div>
                     </div>
-                    <div style={{display: "flex"}}>
+                    <div style={{display: "flex", justifyContent: "space-around"}}>
                     <Stack {...columnProps}>
                         <TextField label="Name of Listing" autoAdjustHeight required id={"descriptionBox"} onGetErrorMessage={value => {
                             if (value === "") {
@@ -309,6 +519,11 @@ class AddListings extends React.Component
                             }
                         }} />
                         <TextField label="Listing Address" required id={"addressBox"} onGetErrorMessage={value => {
+                            if (value==="") {
+                                return 'This field is required';
+                            }
+                        }}/>
+                        <TextField label="Number Of Rooms" required id={"roomBox"} onGetErrorMessage={value => {
                             if (value==="") {
                                 return 'This field is required';
                             }
@@ -328,6 +543,11 @@ class AddListings extends React.Component
                         }}/>
                         <TextField label="Short Paragraph for Details" autoAdjustHeight required id={"detailBox"} onGetErrorMessage={value => {
                             if (value === "") {
+                                return 'This field is required';
+                            }
+                        }}/>
+                        <TextField label="Number Of Bathrooms" required id={"bathroomBox"} onGetErrorMessage={value => {
+                            if (value==="") {
                                 return 'This field is required';
                             }
                         }}/>
