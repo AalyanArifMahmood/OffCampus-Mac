@@ -5,7 +5,7 @@ import { PrimaryButton } from '@fluentui/react/lib/Button';
 
 
 const columnProps: Partial<IStackProps> = {
-    styles: { root: { maxWidth: "46vh" } },
+    styles: { root: { maxWidth: "49vh" } },
 };
 
 class SingleList extends React.Component
@@ -36,10 +36,12 @@ class SingleList extends React.Component
                         <b style={{textAlign: "center", fontSize: '150%', marginLeft: "25%"}}>{this.props.description}</b>
                         <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
                             <Stack {...columnProps}>
-                                <p><b>Listing Address:</b> {this.props.address} </p>
-                                <p><b>Lister's Name:</b> {this.props.name}</p>
-                                <p><b>Lister's Contact:</b> {this.props.email}  </p>
-                                <p><b>Listing Rent:</b> {this.props.rent}  </p>
+                                <p><b>Address:</b> {this.props.address} </p>
+                                <p><b>Contact Name:</b> {this.props.name}</p>
+                                <p><b>Contact Information:</b> {this.props.email}  </p>
+                                <p><b>Rent:</b> {this.props.rent}  </p>
+                                <p><b>Number Of Rooms:</b> {this.props.rooms}  </p>
+                                <p><b>Number Of Bathrooms:</b> {this.props.bathrooms}  </p>
                             </Stack>
                             <img src={this.props.image} alt="Nothing" style={{width: '20%', height: '15%'}}/>
                         </div>
@@ -56,10 +58,12 @@ class SingleList extends React.Component
                         <b style={{textAlign: "center", fontSize: '150%', marginLeft: "25%"}}>{this.props.description}</b>
                         <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
                             <Stack {...columnProps}>
-                                <p><b>Listing Address:</b> {this.props.address} </p>
-                                <p><b>Lister's Name:</b> {this.props.name}</p>
-                                <p><b>Lister's Contact:</b> {this.props.email}  </p>
-                                <p><b>Listing Rent:</b> {this.props.rent}  </p>
+                                <p><b>Address:</b> {this.props.address} </p>
+                                <p><b>Contact Name:</b> {this.props.name}</p>
+                                <p><b>Contact Information:</b> {this.props.email}  </p>
+                                <p><b>Rent:</b> {this.props.rent}  </p>
+                                <p><b>Number Of Rooms:</b> {this.props.rooms}  </p>
+                                <p><b>Number Of Bathrooms:</b> {this.props.bathrooms}  </p>
                                 <b>Description: </b>
                                 <p style={{textAlign: "justify"}}>{this.props.details}</p>
                             </Stack>

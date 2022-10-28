@@ -1,8 +1,11 @@
 import '../../CSS/index.css'
 import React from "react";
+// import {getAuth, GoogleAuthProvider, signInWithRedirect} from "firebase/auth";
+//
+// const auth = getAuth()
+// const provider = new GoogleAuthProvider()
 
-
-export const Profile = React.FunctionComponent = props =>  {
+export const Profile = React.FunctionComponent = () =>  {
     return (
         <>
             <div style={{position: 'relative'}}>
