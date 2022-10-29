@@ -66,13 +66,11 @@ const filterProps = [
 ];
 
 const menuProps = [
-
-
-        {
-            key: "blank",
-            text: "Reset"
-
-        },
+        // {
+        //     key: "blank",
+        //     text: "Reset"
+        //
+        // },
         {
             key: 'FirstHeader',
             text: 'Rent Sorts',
@@ -96,7 +94,7 @@ const menuProps = [
             text: 'Distance: Low to High'
         },
         {
-            key: '',
+            key: 'byDistance2',
             text: 'Distance: High to Low'
         }
 ];
@@ -142,13 +140,48 @@ class AddListings extends React.Component
             files: [],
             open: false,
             selectedKeys: [],
-            showListings: []
+            showListings: [],
+            sortKey: ''
         }
     }
 
     componentDidMount() {
         this.readUserData();
     }
+
+    sort = () =>
+    {
+        // if(this.state.sortKey === "blank" || this.state.sortKey === "")
+        // {
+        //     console.log("reached")
+        //     this.setState(() => ({
+        //         showListings: this.state.listings
+        //     }))
+        // }
+        if(this.state.sortKey === "byRent")
+        {
+            this.setState(prevState => ({
+                showListings: [prevState.showListings[0].sort(function (a, b)
+                    {
+                        return parseInt(a.rent) - parseInt(b.rent);
+                    }
+                )]
+            }))
+        }
+        else if (this.state.sortKey === "byRent2")
+        {
+            this.setState(prevState => ({
+                showListings: [prevState.showListings[0].sort(function (a, b)
+                    {
+                        console.log(a.rent)
+                        console.log(b.rent)
+                        return parseInt(b.rent) - parseInt(a.rent);
+                    }
+                )]
+            }))
+        }
+    }
+
 
     filter = () =>
     {
@@ -320,6 +353,16 @@ class AddListings extends React.Component
         this.setState(prevState => ({able: !prevState.able}));
     }
 
+    onChangeSort = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption) =>
+    {
+        if (item)
+        {
+            this.setState(prevState => ({
+                sortKey: item.key.toString()
+            }))
+        }
+    }
+
 
     onChange = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption) =>
     {
@@ -435,8 +478,8 @@ class AddListings extends React.Component
         }
         else
         {
-            console.log(this.state.selectedKeys)
-            console.log("************")
+            console.log(this.state.listings)
+            console.log("***********************")
             console.log(this.state.showListings)
             return (
                 <>
@@ -478,14 +521,14 @@ class AddListings extends React.Component
                         <Dropdown
                             placeholder="Sort By"
                             label="Sort Listings"
-                            // selectedKeys={this.state.selectedKeys}
+                            selectedKey={this.state.sortKey}
                             // eslint-disable-next-line react/jsx-no-bind
-                            onChange={this.onChange}
+                            onChange={this.onChangeSort}
                             options={menuProps}
                             styles={dropdownStyles}
                         />
                             <br/>
-                            <PrimaryButton text="Set Sort" onClick={this.filter}  allowDisabledFocus style={{marginLeft: "7vw"}}/>
+                            <PrimaryButton text="Set Sort" onClick={this.sort}  allowDisabledFocus style={{marginLeft: "7vw"}}/>
                         </div>
 
                     </div>
@@ -506,7 +549,7 @@ class AddListings extends React.Component
                             </section>
                         </div>
                     </div>
-                    <div style={{display: "flex", justifyContent: "space-around"}}>
+                    <div style={{display: "flex", justifyContent: "space-evenly"}}>
                     <Stack {...columnProps}>
                         <TextField label="Name of Listing" autoAdjustHeight required id={"descriptionBox"} onGetErrorMessage={value => {
                             if (value === "") {

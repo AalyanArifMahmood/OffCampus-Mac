@@ -12,12 +12,12 @@ export const Navbar: React.FunctionComponent<> = props => {
             <h2>OffCampus@Mac</h2>
             </div>
             <Scrollspy
-                items={['home', 'listings', 'addListing', 'aboutus']}
+                items={['home', 'listings', 'addListing', 'profile', 'aboutus']}
                 currentClassName="active">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#listings">Listings</a></li>
                 <li><a href="#addListing">Add Listing</a></li>
-                {/*<li><a href="#profile">Profile</a></li>*/}
+                <li><a href="#profile">Profile</a></li>
                 <li><a href="#aboutus">About</a></li>
             </Scrollspy>
         </nav>

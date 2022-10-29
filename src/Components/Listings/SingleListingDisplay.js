@@ -5,7 +5,7 @@ import { PrimaryButton } from '@fluentui/react/lib/Button';
 
 
 const columnProps: Partial<IStackProps> = {
-    styles: { root: { maxWidth: "49vh" } },
+    styles: { root: { maxWidth: "53vh" } },
 };
 
 class SingleList extends React.Component
@@ -43,7 +43,7 @@ class SingleList extends React.Component
                                 <p><b>Number Of Rooms:</b> {this.props.rooms}  </p>
                                 <p><b>Number Of Bathrooms:</b> {this.props.bathrooms}  </p>
                             </Stack>
-                            <img src={this.props.image} alt="Nothing" style={{width: '20%', height: '15%'}}/>
+                            <img src={this.props.image} alt="Nothing" style={{width: '24%', height: '19%', boxShadow: '1px 12px 9px #6f6f6f', borderRadius: '6%'}} />
                         </div>
                         <PrimaryButton text="Extend" onClick={this.setToTrue} style={{width: '16vh', marginLeft: "45%"}} allowDisabledFocus/>
                     </Box>
@@ -67,7 +67,7 @@ class SingleList extends React.Component
                                 <b>Description: </b>
                                 <p style={{textAlign: "justify"}}>{this.props.details}</p>
                             </Stack>
-                            <img src={this.props.image} alt="Nothing" style={{width: '20%', height: '15%'}}/>
+                            <img src={this.props.image} alt="Nothing" style={{width: '24%', height: '19%', boxShadow: '1px 12px 9px #6f6f6f', borderRadius: '6%'}} />
                         </div>
                         <PrimaryButton text="Retract" onClick={this.setToTrue} style={{width: '16vh', marginLeft: "45%"}} allowDisabledFocus/>
                     </Box>
