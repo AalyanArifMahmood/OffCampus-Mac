@@ -478,9 +478,6 @@ class AddListings extends React.Component
         }
         else
         {
-            console.log(this.state.listings)
-            console.log("***********************")
-            console.log(this.state.showListings)
             return (
                 <>
                     <div style={{position: 'relative'}}>
@@ -584,7 +581,7 @@ class AddListings extends React.Component
                                 return 'This field is required';
                             }
                         }}/>
-                        <TextField label="Short Paragraph for Details" autoAdjustHeight required id={"detailBox"} onGetErrorMessage={value => {
+                        <TextField label="Short Paragraph for Details" multiline autoAdjustHeight required id={"detailBox"} onGetErrorMessage={value => {
                             if (value === "") {
                                 return 'This field is required';
                             }
