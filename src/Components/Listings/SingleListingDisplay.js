@@ -119,11 +119,17 @@ class SingleList extends React.Component
                                 <p><b>Rent:</b> {this.props.rent}  </p>
                                 <p><b>Number Of Rooms:</b> {this.props.rooms}  </p>
                                 <p><b>Number Of Bathrooms:</b> {this.props.bathrooms}  </p>
-                                <b>Description: </b>
-                                <p style={{textAlign: "justify"}}>{this.props.details}</p>
                             </Stack>
                             <img src={this.props.image} alt="Nothing" style={{width: '30%', height: '25%', boxShadow: '1px 12px 9px #6f6f6f', borderRadius: '6%'}} />
                         </div>
+                        <div className={contentStyles.body}>
+                            <Stack>
+                                <b>Description: </b>
+                                <p style={{textAlign: "justify"}}>{this.props.details}</p>
+                            </Stack>
+
+                        </div>
+
 
                     </Modal>
                 </Box>
