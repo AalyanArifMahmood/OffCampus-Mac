@@ -1,12 +1,65 @@
 import React from 'react'
 import Box from '@material-ui/core/Box';
 import {IStackProps, Stack} from '@fluentui/react/lib/Stack';
-import { PrimaryButton } from '@fluentui/react/lib/Button';
-
+import { PrimaryButton, IconButton } from '@fluentui/react/lib/Button';
+import {   Modal, IDragOptions, getTheme, mergeStyleSets, FontWeights,} from '@fluentui/react';
+import {IButtonStyles} from "@fluentui/react";
+import {IIconProps} from "@fluentui/react";
 
 const columnProps: Partial<IStackProps> = {
     styles: { root: { maxWidth: "53vh" } },
 };
+
+
+const cancelIcon: IIconProps = { iconName: 'Cancel' };
+
+const theme = getTheme();
+const contentStyles = mergeStyleSets({
+    container: {
+        display: 'flex',
+        flexFlow: 'column nowrap',
+        alignItems: 'stretch',
+    },
+    header: [
+        theme.fonts.xLargePlus,
+        {
+            flex: '1 1 auto',
+            borderTop: `4px solid ${theme.palette.themePrimary}`,
+            color: theme.palette.neutralPrimary,
+            display: 'flex',
+
+            alignItems: 'center',
+            fontWeight: FontWeights.semibold,
+            padding: '12px 12px 14px 24px',
+        },
+    ],
+    body: {
+        flex: '4 4 auto',
+        padding: '0 24px 24px 24px',
+        overflowY: 'hidden',
+        display: "flex",
+        justifyContent: "space-between",
+        selectors: {
+            p: { margin: '14px 0' },
+            'p:first-child': { marginTop: 0 },
+            'p:last-child': { marginBottom: 0 },
+        },
+    },
+});
+
+const iconButtonStyles: Partial<IButtonStyles> = {
+    root: {
+        color: theme.palette.neutralPrimary,
+        marginLeft: 'auto',
+        marginTop: '4px',
+        marginRight: '2px',
+    },
+    rootHovered: {
+        color: theme.palette.neutralDark,
+    },
+};
+
+
 
 class SingleList extends React.Component
 {
@@ -14,7 +67,7 @@ class SingleList extends React.Component
         super(props);
         this.state =
             {
-                extend: true
+                extend: false
             }
 
     }
@@ -26,37 +79,39 @@ class SingleList extends React.Component
 
     render()
     {
-        // const img = document.getElementById("listing");
-        // img.setAttribute('src', this.props.image);
-        if (this.state.extend)
-        {
-            return (
-                <>
-                    <Box bgcolor="white" p={1} border={2} marginRight={10} marginLeft={10}>
-                        <b style={{textAlign: "center", fontSize: '150%', marginLeft: "25%"}}>{this.props.description}</b>
-                        <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
-                            <Stack {...columnProps}>
-                                <p><b>Address:</b> {this.props.address} </p>
-                                <p><b>Contact Name:</b> {this.props.name}</p>
-                                <p><b>Contact Information:</b> {this.props.email}  </p>
-                                <p><b>Rent:</b> {this.props.rent}  </p>
-                                <p><b>Number Of Rooms:</b> {this.props.rooms}  </p>
-                                <p><b>Number Of Bathrooms:</b> {this.props.bathrooms}  </p>
-                            </Stack>
-                            <img src={this.props.image} alt="Nothing" style={{width: '24%', height: '19%', boxShadow: '1px 12px 9px #6f6f6f', borderRadius: '6%'}} />
+        return (
+            <>
+                <Box bgcolor="white" p={1} border={2} marginRight={10} marginLeft={10}>
+                    <b style={{textAlign: "center", fontSize: '150%', marginLeft: "25%"}}>{this.props.description}</b>
+                    <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
+                        <Stack {...columnProps}>
+                            <p><b>Address:</b> {this.props.address} </p>
+                            <p><b>Contact Name:</b> {this.props.name}</p>
+                            <p><b>Contact Information:</b> {this.props.email}  </p>
+                            <p><b>Rent:</b> {this.props.rent}  </p>
+                            <p><b>Number Of Rooms:</b> {this.props.rooms}  </p>
+                            <p><b>Number Of Bathrooms:</b> {this.props.bathrooms}  </p>
+                        </Stack>
+                        <img src={this.props.image} alt="Nothing" style={{width: '24%', height: '19%', boxShadow: '1px 12px 9px #6f6f6f', borderRadius: '6%'}} />
+                    </div>
+                    <PrimaryButton text="More Info" onClick={this.setToTrue} style={{width: '16vh', marginLeft: "45%"}} allowDisabledFocus/>
+                    <Modal
+                    isOpen={this.state.extend}
+                    onDismiss={this.setToTrue}
+                    containerClassName={contentStyles.container}
+                    isBlocking={false}
+                    dragOptions={true}>
+
+                        <div className={contentStyles.header}>
+                            <span>{this.props.description}</span>
+                            <IconButton
+                                styles={iconButtonStyles}
+                                iconProps={cancelIcon}
+                                ariaLabel="Close popup modal"
+                                onClick={this.setToTrue}
+                            />
                         </div>
-                        <PrimaryButton text="Extend" onClick={this.setToTrue} style={{width: '16vh', marginLeft: "45%"}} allowDisabledFocus/>
-                    </Box>
-                </>
-            );
-        }
-        else
-        {
-            return (
-                <>
-                    <Box bgcolor="white" p={1} border={2} marginRight={10} marginLeft={10}>
-                        <b style={{textAlign: "center", fontSize: '150%', marginLeft: "25%"}}>{this.props.description}</b>
-                        <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
+                        <div className={contentStyles.body}>
                             <Stack {...columnProps}>
                                 <p><b>Address:</b> {this.props.address} </p>
                                 <p><b>Contact Name:</b> {this.props.name}</p>
@@ -67,13 +122,13 @@ class SingleList extends React.Component
                                 <b>Description: </b>
                                 <p style={{textAlign: "justify"}}>{this.props.details}</p>
                             </Stack>
-                            <img src={this.props.image} alt="Nothing" style={{width: '24%', height: '19%', boxShadow: '1px 12px 9px #6f6f6f', borderRadius: '6%'}} />
+                            <img src={this.props.image} alt="Nothing" style={{width: '30%', height: '25%', boxShadow: '1px 12px 9px #6f6f6f', borderRadius: '6%'}} />
                         </div>
-                        <PrimaryButton text="Retract" onClick={this.setToTrue} style={{width: '16vh', marginLeft: "45%"}} allowDisabledFocus/>
-                    </Box>
-                </>
-            );
-        }
+
+                    </Modal>
+                </Box>
+            </>
+        );
     }
 
 }
