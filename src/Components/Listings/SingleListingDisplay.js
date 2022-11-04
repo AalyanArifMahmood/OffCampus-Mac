@@ -82,16 +82,38 @@ class SingleList extends React.Component
         return (
             <>
                 <Box bgcolor="white" p={1} border={2} marginRight={10} marginLeft={10}>
-                    <b style={{textAlign: "center", fontSize: '150%', marginLeft: "25%"}}>{this.props.description}</b>
+                    <b style={{textAlign: "center", fontSize: '150%', marginLeft: "5%"}}>{this.props.description}</b>
+                    
                     <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
-                        <Stack {...columnProps}>
+                    <b style={{textAlign: "left", fontSize: '120%', marginLeft: "5%", color: "grey"}}>{this.props.address}</b>
+                    </div>
+
+                    <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
+                    <b style={{textAlign: "left", fontSize: '120%', marginLeft: "5%", color: "#373737"}}>{this.props.name}{" "}{this.props.email}</b>
+                    </div>
+
+                    <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
+
+                    <Box bgcolor="white" p={1} border={2} marginRight={0} marginLeft={10} marginBottom = {10} marginTop = {5} color = "#3792cd">
+                    <b style={{textAlign: "left", fontSize: '120%', marginLeft: "5%", color: "black"}}>{this.props.rent}{"$"}</b>
+                    </Box>
+
+                    <Box bgcolor="white" p={1} border={2} marginRight={0} marginLeft={5} marginBottom = {10} marginTop = {5} color = "#3792cd">
+                    <b style={{textAlign: "left", fontSize: '120%', marginLeft: "5%", color: "black"}}>{"Rooms  "}{this.props.rooms}</b>
+                    </Box>
+
+                    <Box bgcolor="white" p={1} border={2} marginRight={0} marginLeft={5} marginBottom = {10} marginTop = {5} color = "#3792cd">
+                    <b style={{textAlign: "left", fontSize: '120%', marginLeft: "5%", color: "black"}}>{"Bathrooms  "}{this.props.bathrooms}</b>
+                    </Box>
+
+                        {/* <Stack {...columnProps}>
                             <p><b>Address:</b> {this.props.address} </p>
                             <p><b>Contact Name:</b> {this.props.name}</p>
                             <p><b>Contact Information:</b> {this.props.email}  </p>
                             <p><b>Rent:</b> {this.props.rent}  </p>
                             <p><b>Number Of Rooms:</b> {this.props.rooms}  </p>
                             <p><b>Number Of Bathrooms:</b> {this.props.bathrooms}  </p>
-                        </Stack>
+                        </Stack> */}
                         <img src={this.props.image} alt="Nothing" style={{width: '24%', height: '19%', boxShadow: '1px 12px 9px #6f6f6f', borderRadius: '6%'}} />
                     </div>
                     <PrimaryButton text="More Info" onClick={this.setToTrue} style={{width: '16vh', marginLeft: "45%"}} allowDisabledFocus/>
