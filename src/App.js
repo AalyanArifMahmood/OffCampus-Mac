@@ -42,7 +42,7 @@ class App extends React.Component
                 <br/>
                 <Info/>
                 <AddListings/>
-                <Profile/>
+                {/*<Profile/>*/}
                 <AboutUs/>
                 <Footnote/>
             </>

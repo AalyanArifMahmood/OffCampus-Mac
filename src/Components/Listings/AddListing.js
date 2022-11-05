@@ -8,6 +8,8 @@ import {DropzoneDialog} from 'material-ui-dropzone'
 import { Stack, IStackProps, TextField, initializeIcons} from '@fluentui/react';
 import { Dropdown, DropdownMenuItemType, IDropdownOption, IDropdownStyles } from '@fluentui/react/lib/Dropdown';
 import { PrimaryButton } from '@fluentui/react/lib/Button';
+import {getAuth, getRedirectResult, GoogleAuthProvider, signInWithRedirect} from "firebase/auth";
+import Profile from '../Profile/profile'
 
 
 const firebaseConfig = {
@@ -20,6 +22,9 @@ const firebaseConfig = {
     measurementId: "G-7CFVGFQXE8",
     databaseURL: "https://offcampusatmac-default-rtdb.firebaseio.com/"
 };
+
+const auth = getAuth()
+
 
 
 // ***********************************************  FILTER SECTION  ****************************************************
@@ -101,6 +106,15 @@ const menuProps = [
 
 // ********************************************  FILTER SECTION END ****************************************************
 
+// ***********************************************  AUTH SECTION  ******************************************************
+const provider = new GoogleAuthProvider();
+const signIn = () =>
+{
+    signInWithRedirect(auth, provider)
+}
+
+// ***********************************************  AUTH SECTION ENDS  *************************************************
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -141,13 +155,73 @@ class AddListings extends React.Component
             open: false,
             selectedKeys: [],
             showListings: [],
-            sortKey: ''
+            sortKey: '',
+            userNow: [],
+            userListings: []
+
         }
     }
 
     componentDidMount() {
         this.readUserData();
+
+        getRedirectResult(auth)
+            .then((result) => {
+                // This gives you a Google Access Token. You can use it to access Google APIs.
+                const credential = GoogleAuthProvider.credentialFromResult(result);
+                const token = credential.accessToken;
+
+                // The signed-in user info.
+                const user = result.user;
+                this.setState(prevState => ({
+                    userNow: [...prevState.userNow, user]
+                }))
+
+            }).catch((error) => {
+            // Handle Errors here.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // The email of the user's account used.
+            const email = error.customData.email;
+            // The AuthCredential type that was used.
+            const credential = GoogleAuthProvider.credentialFromError(error);
+            // ...
+        });
     }
+
+    // ***********************************************  AUTH SECTION  ***************************************************
+
+    showProfile = () =>
+    {
+        if (this.state.userNow.length === 0)
+        {
+            return (
+                <>
+                    <div style={{position: 'relative'}}>
+                        <div style={{textAlign: 'center', paddingLeft: '10%',bottom: '35%',paddingRight: '10%'}}>
+                            <section id={"profile"}>
+                                <h1 style={{fontSize: '6vh', fontFamily: 'Newslab, georgia, Bakersville', color: '#000000'}}>Your Profile</h1>
+                            </section>
+                            <br/>
+                            <PrimaryButton text="Login" onClick={signIn} allowDisabledFocus/>
+                        </div>
+                    </div>
+                    <div className="separator" />
+                </>
+            );
+        }
+        else
+        {
+            return(
+                <>
+                    <p>{this.state.userNow[0].displayName}</p>
+                </>
+
+            );
+        }
+    }
+
+    // ***********************************************  AUTH SECTION ENDS  **********************************************
 
     sort = () =>
     {
@@ -278,6 +352,7 @@ class AddListings extends React.Component
             {
                 tempListings.push(childSnapshot.val())
                 tempAddresses.push(childSnapshot.val().address)
+
             })
         });
         this.setState(prevState => ({
@@ -289,6 +364,7 @@ class AddListings extends React.Component
         this.setState(prevState => ({
             listAddresses: [...prevState.listAddresses, tempAddresses]
         }))
+
     }
 
     handleClose() {
@@ -472,12 +548,15 @@ class AddListings extends React.Component
                      <PrimaryButton text="Add Listing" onClick={this.writeUserData} style={{marginLeft: "5%", backgroundColor: 'green'}} allowDisabledFocus/>
                      </div>
                      <div className="separator"/>
+                     <Profile userNow={this.state.userNow} listings={this.state.listings}/>
                  </>
+
              );
             // *************************************   AFTER RE RENDER  ************************************************
         }
         else
         {
+            console.log(this.state.userListings)
             return (
                 <>
                     <div style={{position: 'relative'}}>
@@ -612,6 +691,7 @@ class AddListings extends React.Component
                     <PrimaryButton text="Add Listing" onClick={this.writeUserData} style={{marginLeft: "5%", backgroundColor: 'green'}} allowDisabledFocus/>
                     </div>
                     <div className="separator"/>
+                    <Profile userNow={this.state.userNow} listings={this.state.listings}/>
                 </>
             );
         }
