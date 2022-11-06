@@ -41,10 +41,10 @@ class App extends React.Component
                 <br/>
                 <br/>
                 <Info/>
-                <AddListings/>
-                {/*<Profile/>*/}
-                <AboutUs/>
-                <Footnote/>
+                <AddListings userNow={this.props.userNow}/>
+                {/*/!*<Profile/>*!/*/}
+                {/*<AboutUs/>*/}
+                {/*<Footnote/>*/}
             </>
         );
     }
