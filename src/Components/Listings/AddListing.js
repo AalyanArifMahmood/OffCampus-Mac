@@ -8,11 +8,7 @@ import {DropzoneDialog} from 'material-ui-dropzone'
 import { Stack, IStackProps, TextField, initializeIcons} from '@fluentui/react';
 import { Dropdown, DropdownMenuItemType, IDropdownOption, IDropdownStyles } from '@fluentui/react/lib/Dropdown';
 import { PrimaryButton } from '@fluentui/react/lib/Button';
-import {getAuth, getRedirectResult, GoogleAuthProvider, signInWithRedirect} from "firebase/auth";
 import Profile from '../Profile/profile'
-import AboutUs from "../About Us/AboutUs";
-import Footnote from "../Footnote/footnote";
-
 
 const firebaseConfig = {
     apiKey: "AIzaSyCxyu7ou0WSzQYk63StiYtCVG-XtUPpqNs",
@@ -25,7 +21,7 @@ const firebaseConfig = {
     databaseURL: "https://offcampusatmac-default-rtdb.firebaseio.com/"
 };
 
-const auth = getAuth()
+
 
 
 
@@ -157,29 +153,6 @@ class AddListings extends React.Component
 
     componentDidMount() {
         this.readUserData();
-
-        getRedirectResult(auth)
-            .then((result) => {
-                // This gives you a Google Access Token. You can use it to access Google APIs.
-                const credential = GoogleAuthProvider.credentialFromResult(result);
-                const token = credential.accessToken;
-
-                // The signed-in user info.
-                const user = result.user;
-                this.setState(prevState => ({
-                    userNow: [...prevState.userNow, user]
-                }))
-
-            }).catch((error) => {
-            // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // The email of the user's account used.
-            const email = error.customData.email;
-            // The AuthCredential type that was used.
-            const credential = GoogleAuthProvider.credentialFromError(error);
-            // ...
-        });
     }
 
     sort = () =>
@@ -507,8 +480,6 @@ class AddListings extends React.Component
                      </div>
                      <div className="separator"/>
                      <Profile userNow={this.props.userNow} listings={this.state.listings}/>
-                     <AboutUs implement={true}/>
-                     <Footnote implement={true}/>
                  </>
 
              );
@@ -652,8 +623,6 @@ class AddListings extends React.Component
                     </div>
                     <div className="separator"/>
                     <Profile userNow={this.props.userNow} listings={this.state.listings}/>
-                    <AboutUs implement={true}/>
-                    <Footnote implement={true}/>
                 </>
             );
         }
