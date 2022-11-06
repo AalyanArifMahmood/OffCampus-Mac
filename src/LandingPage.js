@@ -2,6 +2,8 @@ import * as React from "react";
 import { PrimaryButton } from '@fluentui/react/lib/Button';
 import {getAuth, getRedirectResult, GoogleAuthProvider, signInWithRedirect} from "firebase/auth";
 import App from './App';
+import image2 from "./Resources/MacLogo.png";
+import { Stack } from '@fluentui/react';
 
 const auth = getAuth()
 const provider = new GoogleAuthProvider();
@@ -53,10 +55,11 @@ class landingPage extends React.Component
         if(this.state.userNow.length === 0)
         {
             return (
-                <>
+                <div style={{textAlign: "center"}}>
+                    <h1 style={{marginTop: '8%', fontSize: '9vh', fontFamily: 'Newslab, georgia, Bakersville'}}>OffCampus@Mac</h1>
+                    <h2 style={{fontSize: '4vh', fontFamily: 'Newslab, georgia, Bakersville'}}>Please Proceed Below</h2>
                     <PrimaryButton text="Login" onClick={signIn} allowDisabledFocus/>
-
-                </>
+                </div>
             );
         }
         else
@@ -70,7 +73,12 @@ class landingPage extends React.Component
             else
             {
                 return (
-                    <h1>Sorry, the page unavailable with your current account</h1>
+                    <>
+                        <div style={{textAlign: "center"}}>
+                            <h1 style={{marginTop: '8%', fontSize: '9vh', fontFamily: 'Newslab, georgia, Bakersville'}}>Sorry, the page unavailable with your current account</h1>
+                            <h1 style={{marginTop: '8%', fontSize: '6vh', fontFamily: 'Newslab, georgia, Bakersville'}}>Try Logging in with a <b>valid</b> Macalester Email</h1>
+                        </div>
+                    </>
                 );
             }
         }
