@@ -4,9 +4,7 @@ import { PrimaryButton } from '@fluentui/react/lib/Button';
 import { initializeApp } from "firebase/app";
 import {GoogleAuthProvider,
 getAuth,
- signInWithRedirect,
-    getRedirectResult,
-signOut}
+ signInWithRedirect}
 from "firebase/auth";
 import SingleList from "../Listings/SingleListingDisplay";
 
