@@ -95,7 +95,6 @@ class Profile extends React.Component
         }
         else
         {
-            console.log(this.props.listings)
             let photoUrl = this.props.userNow[0].photoURL;
             const newP = "s400-c";
             const oldP = /s96-c/;
@@ -112,7 +111,7 @@ class Profile extends React.Component
                                 <br/>
                             </div>
                             <div style={{textAlign: "center"}}>
-                                <img src={photoUrl1} style={{width: "30vh", height: "30vh", borderRadius: "100%"}}/>
+                                <img src={photoUrl1} alt={"none"} style={{width: "30vh", height: "30vh", borderRadius: "100%"}}/>
                             </div>
                             <br/>
                             <div style={{textAlign: "center"}}>
@@ -136,7 +135,7 @@ class Profile extends React.Component
                                 <br/>
                             </div>
                             <div style={{textAlign: "center"}}>
-                                <img src={photoUrl1} style={{width: "30vh", height: "30vh", borderRadius: "100%"}}/>
+                                <img src={photoUrl1} alt={"none"} style={{width: "30vh", height: "30vh", borderRadius: "100%"}}/>
                             </div>
                             <br/>
                             <div style={{textAlign: "center"}}>
