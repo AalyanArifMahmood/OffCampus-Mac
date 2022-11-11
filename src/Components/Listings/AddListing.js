@@ -1,6 +1,7 @@
 import '../../CSS/index.css'
 import * as React from "react";
 import SingleList from "./SingleListingDisplay";
+import SingleList2 from "./SingleListingDisplay2";
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, onValue } from "firebase/database";
 import { getStorage, ref as reff, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -283,7 +284,7 @@ class AddListings extends React.Component
             snapshot.forEach(function(childSnapshot)
             {
                 tempListings.push(childSnapshot.val())
-                tempAddresses.push(childSnapshot.val().address)
+                tempAddresses.push(childSnapshot.val().address.toLowerCase())
 
             })
         });
@@ -322,9 +323,9 @@ class AddListings extends React.Component
     writeUserData = () =>
     {
         if (!(document.getElementById("addressBox").value === "") && !(document.getElementById("nameBox").value === "") &&
-            !(document.getElementById("rentBox").value === "") && !(document.getElementById("emailBox").value === ""))
+            !(document.getElementById("rentBox").value === ""))
         {
-            if(this.state.listAddresses[0].includes(document.getElementById("addressBox").value))
+            if(this.state.listAddresses[0].includes(document.getElementById("addressBox").value.toLowerCase()))
             {
                 alert("This listing already exists");
             }
@@ -339,7 +340,7 @@ class AddListings extends React.Component
                         set(ref(database, 'items/' + document.getElementById("addressBox").value), {
                             description: document.getElementById("descriptionBox").value,
                             name: document.getElementById("nameBox").value,
-                            email: document.getElementById("emailBox").value + "@macalester.edu",
+                            email: this.props.userNow[0].email,
                             address: document.getElementById("addressBox").value,
                             rent: document.getElementById("rentBox").value,
                             photo: url,
@@ -435,12 +436,6 @@ class AddListings extends React.Component
                              }}/>
                          </Stack>
                          <Stack {...columnProps2}>
-                             <TextField label="Contact Email" required mask="m\ask: @macalester.edu" id={"emailBox"} suffix="@macalester.edu"
-                                        onGetErrorMessage={value => {
-                                            if (value==="") {
-                                                return 'This field is required';
-                                            }
-                                        }}/>
                              <TextField label="Rent" required id={"rentBox"} onGetErrorMessage={value => {
                                  if (value==="") {
                                      return 'This field is required';
@@ -487,7 +482,6 @@ class AddListings extends React.Component
         }
         else
         {
-            console.log(this.state.userListings)
             return (
                 <>
                     <div style={{position: 'relative'}}>
@@ -580,12 +574,6 @@ class AddListings extends React.Component
                         }}/>
                     </Stack>
                     <Stack {...columnProps2}>
-                        <TextField label="Contact Email" required mask="m\ask: @macalester.edu" id={"emailBox"} suffix="@macalester.edu"
-                                   onGetErrorMessage={value => {
-                                       if (value==="") {
-                                           return 'This field is required';
-                                       }
-                                   }}/>
                         <TextField label="Rent" required id={"rentBox"} onGetErrorMessage={value => {
                             if (value==="") {
                                 return 'This field is required';

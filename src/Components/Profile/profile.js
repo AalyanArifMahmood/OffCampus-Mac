@@ -6,7 +6,8 @@ import {GoogleAuthProvider,
 getAuth,
  signInWithRedirect}
 from "firebase/auth";
-import SingleList from "../Listings/SingleListingDisplay";
+
+import SingleList2 from "../Listings/SingleListingDisplay2";
 
 // import {getFirestore, query, getDocs, collection, where, addDoc,} from "firebase/firestore";
 
@@ -64,7 +65,8 @@ class Profile extends React.Component
         super();
         this.state =
             {
-                truth: false
+                truth: false,
+                myListings: []
             }
     }
 
@@ -143,7 +145,7 @@ class Profile extends React.Component
                         <ul>
                             {this.props.listings[0].map((data) => (
                                 <li key={data.address}>
-                                    <SingleList description={data.description} name={data.name} address={data.address} email={data.email} rent={data.rent} image={data.photo} details={data.details} rooms={data.numberRooms} bathrooms={data.numberBathrooms}/>
+                                    <SingleList2 description={data.description} name={data.name} address={data.address} email={data.email} rent={data.rent} image={data.photo} details={data.details} rooms={data.numberRooms} bathrooms={data.numberBathrooms}  userNow={this.props.userNow}/>
                                 </li>
                             ))}
                         </ul>
