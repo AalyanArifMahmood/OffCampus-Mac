@@ -1,6 +1,7 @@
 import '../../CSS/index.css'
 import * as React from "react";
 import SingleList from "./SingleListingDisplay";
+import SingleList2 from "./SingleListingDisplay2";
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, onValue } from "firebase/database";
 import { getStorage, ref as reff, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -8,7 +9,7 @@ import {DropzoneDialog} from 'material-ui-dropzone'
 import { Stack, IStackProps, TextField, initializeIcons} from '@fluentui/react';
 import { Dropdown, DropdownMenuItemType, IDropdownOption, IDropdownStyles } from '@fluentui/react/lib/Dropdown';
 import { PrimaryButton } from '@fluentui/react/lib/Button';
-
+import Profile from '../Profile/profile'
 
 const firebaseConfig = {
     apiKey: "AIzaSyCxyu7ou0WSzQYk63StiYtCVG-XtUPpqNs",
@@ -20,6 +21,9 @@ const firebaseConfig = {
     measurementId: "G-7CFVGFQXE8",
     databaseURL: "https://offcampusatmac-default-rtdb.firebaseio.com/"
 };
+
+
+
 
 
 // ***********************************************  FILTER SECTION  ****************************************************
@@ -141,7 +145,10 @@ class AddListings extends React.Component
             open: false,
             selectedKeys: [],
             showListings: [],
-            sortKey: ''
+            sortKey: '',
+            userNow: [],
+            userListings: []
+
         }
     }
 
@@ -277,7 +284,8 @@ class AddListings extends React.Component
             snapshot.forEach(function(childSnapshot)
             {
                 tempListings.push(childSnapshot.val())
-                tempAddresses.push(childSnapshot.val().address)
+                tempAddresses.push(childSnapshot.val().address.toLowerCase())
+
             })
         });
         this.setState(prevState => ({
@@ -289,6 +297,7 @@ class AddListings extends React.Component
         this.setState(prevState => ({
             listAddresses: [...prevState.listAddresses, tempAddresses]
         }))
+
     }
 
     handleClose() {
@@ -314,9 +323,9 @@ class AddListings extends React.Component
     writeUserData = () =>
     {
         if (!(document.getElementById("addressBox").value === "") && !(document.getElementById("nameBox").value === "") &&
-            !(document.getElementById("rentBox").value === "") && !(document.getElementById("emailBox").value === ""))
+            !(document.getElementById("rentBox").value === ""))
         {
-            if(this.state.listAddresses[0].includes(document.getElementById("addressBox").value))
+            if(this.state.listAddresses[0].includes(document.getElementById("addressBox").value.toLowerCase()))
             {
                 alert("This listing already exists");
             }
@@ -331,7 +340,7 @@ class AddListings extends React.Component
                         set(ref(database, 'items/' + document.getElementById("addressBox").value), {
                             description: document.getElementById("descriptionBox").value,
                             name: document.getElementById("nameBox").value,
-                            email: document.getElementById("emailBox").value + "@macalester.edu",
+                            email: this.props.userNow[0].email,
                             address: document.getElementById("addressBox").value,
                             rent: document.getElementById("rentBox").value,
                             photo: url,
@@ -393,7 +402,6 @@ class AddListings extends React.Component
                              <PrimaryButton text="Show Listings" onClick={this.enable} allowDisabledFocus/>
                          </div>
                      </div>
-
                      <div className="separator"/>
 
                      <div style={{position: 'relative'}}>
@@ -428,12 +436,6 @@ class AddListings extends React.Component
                              }}/>
                          </Stack>
                          <Stack {...columnProps2}>
-                             <TextField label="Contact Email" required mask="m\ask: @macalester.edu" id={"emailBox"} suffix="@macalester.edu"
-                                        onGetErrorMessage={value => {
-                                            if (value==="") {
-                                                return 'This field is required';
-                                            }
-                                        }}/>
                              <TextField label="Rent" required id={"rentBox"} onGetErrorMessage={value => {
                                  if (value==="") {
                                      return 'This field is required';
@@ -472,7 +474,9 @@ class AddListings extends React.Component
                      <PrimaryButton text="Add Listing" onClick={this.writeUserData} style={{marginLeft: "5%", backgroundColor: 'green'}} allowDisabledFocus/>
                      </div>
                      <div className="separator"/>
+                     <Profile userNow={this.props.userNow} listings={this.state.listings}/>
                  </>
+
              );
             // *************************************   AFTER RE RENDER  ************************************************
         }
@@ -570,12 +574,6 @@ class AddListings extends React.Component
                         }}/>
                     </Stack>
                     <Stack {...columnProps2}>
-                        <TextField label="Contact Email" required mask="m\ask: @macalester.edu" id={"emailBox"} suffix="@macalester.edu"
-                                   onGetErrorMessage={value => {
-                                       if (value==="") {
-                                           return 'This field is required';
-                                       }
-                                   }}/>
                         <TextField label="Rent" required id={"rentBox"} onGetErrorMessage={value => {
                             if (value==="") {
                                 return 'This field is required';
@@ -612,6 +610,7 @@ class AddListings extends React.Component
                     <PrimaryButton text="Add Listing" onClick={this.writeUserData} style={{marginLeft: "5%", backgroundColor: 'green'}} allowDisabledFocus/>
                     </div>
                     <div className="separator"/>
+                    <Profile userNow={this.props.userNow} listings={this.state.listings}/>
                 </>
             );
         }
