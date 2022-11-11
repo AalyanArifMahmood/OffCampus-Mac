@@ -4,12 +4,14 @@ import {IStackProps, Stack} from '@fluentui/react/lib/Stack';
 import { PrimaryButton, IconButton } from '@fluentui/react/lib/Button';
 import {   Modal, IDragOptions, getTheme, mergeStyleSets, FontWeights,} from '@fluentui/react';
 import {IButtonStyles} from "@fluentui/react";
-import {IIconProps} from "@fluentui/react";
+import {IIconProps, initializeIcons} from "@fluentui/react";
+
 
 const columnProps: Partial<IStackProps> = {
     styles: { root: { maxWidth: "53vh" } },
 };
 
+const mailIcon: IIconProps = { iconName: 'Mail' };
 
 const cancelIcon: IIconProps = { iconName: 'Cancel' };
 
@@ -89,21 +91,32 @@ class SingleList extends React.Component
                     </div>
 
                     <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
-                    <b style={{textAlign: "left", fontSize: '120%', marginLeft: "5%", color: "#373737"}}>{this.props.name}{" "}{this.props.email}</b>
+                    <b style={{textAlign: "left", fontSize: '120%', marginLeft: "5%", color: "grey"}}>{this.props.name}</b>
+                    </div>
+
+                    <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
+                        <IconButton iconProps = {mailIcon}/>
+                        <b style={{textAlign: "left", fontSize: '120%', marginLeft: "5%", color: "grey"}}>{this.props.email} </b>
                     </div>
 
                     <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
 
-                    <Box bgcolor="white" p={1} border={2} marginRight={0} marginLeft={10} marginBottom = {10} marginTop = {5} color = "#3792cd">
-                    <b style={{textAlign: "left", fontSize: '120%', marginLeft: "5%", color: "black"}}>{this.props.rent}{"$"}</b>
+                    <Box bgcolor="white" p={1} border={2} marginRight={0} marginLeft={10} marginBottom = {10} marginTop = {5} color = "#3792cd" style={{textAlign: "center", maxHeight: "7vh", borderRadius: "30%"}}>
+                        <b style={{color:"black", fontSize: "120%"}}>Rent</b>
+                        <br/>
+                    <b style={{textAlign: "left", fontSize: '120%', marginLeft: "5%", color: "black"}}>{"$"}{this.props.rent}</b>
                     </Box>
 
-                    <Box bgcolor="white" p={1} border={2} marginRight={0} marginLeft={5} marginBottom = {10} marginTop = {5} color = "#3792cd">
-                    <b style={{textAlign: "left", fontSize: '120%', marginLeft: "5%", color: "black"}}>{"Rooms  "}{this.props.rooms}</b>
+                    <Box bgcolor="white" p={1} border={2} marginRight={0} marginLeft={5} marginBottom = {10} marginTop = {5} color = "#3792cd" style={{textAlign: "center", maxHeight: "7vh", borderRadius: "30%"}}>
+                        <b style={{color:"black", fontSize: "120%"}}>Rooms</b>
+                        <br/>
+                        <b style={{fontSize: '120%', marginLeft: "5%", color: "black"}}>{this.props.rooms}</b>
                     </Box>
 
-                    <Box bgcolor="white" p={1} border={2} marginRight={0} marginLeft={5} marginBottom = {10} marginTop = {5} color = "#3792cd">
-                    <b style={{textAlign: "left", fontSize: '120%', marginLeft: "5%", color: "black"}}>{"Bathrooms  "}{this.props.bathrooms}</b>
+                    <Box bgcolor="white" p={1} border={2} marginRight={0} marginLeft={5} marginBottom = {10} marginTop = {5} color = "#3792cd" style={{textAlign: "center", maxHeight: "7vh", borderRadius: "30%"}}>
+                        <b style={{color:"black", fontSize: "120%"}}>Bathrooms</b>
+                        <br/>
+                        <b style={{textAlign: "left", fontSize: '120%', marginLeft: "5%", color: "black"}}>{this.props.bathrooms}</b>
                     </Box>
 
                         {/* <Stack {...columnProps}>
