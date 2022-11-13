@@ -1,7 +1,6 @@
 import '../../CSS/index.css'
 import * as React from "react";
 import SingleList from "./SingleListingDisplay";
-import SingleList2 from "./SingleListingDisplay2";
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, onValue } from "firebase/database";
 import { getStorage, ref as reff, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -66,7 +65,43 @@ const filterProps = [
         {
             key: 'byBathrooms3',
             text: '3+ Bathrooms'
-        }
+        },
+        {
+            key: 'Header3',
+            text: 'Type Filters',
+            itemType: DropdownMenuItemType.Header
+        },
+        {
+            key: 'Lease',
+            text: 'For Lease'
+        },
+        {
+            key: 'subletWinter',
+            text: 'Winter Sublet'
+        },      {
+            key: 'subletSummer',
+            text: 'Summer Sublet'
+        },
+];
+
+const typeProps = [
+    {
+        key: 'typeHeader',
+        text: 'Type of Listing',
+        itemType: DropdownMenuItemType.Header
+    },
+    {
+        key: 'lease',
+        text: 'Lease'
+    },
+    {
+        key: 'winterSublet',
+        text: 'Sublet for Winter'
+    },
+    {
+        key: 'summerSublet',
+        text: 'Sublet for Summer'
+    }
 ];
 
 const menuProps = [
@@ -146,6 +181,8 @@ class AddListings extends React.Component
             selectedKeys: [],
             showListings: [],
             sortKey: '',
+            typeKey: '',
+            typeText: '',
             userNow: [],
             userListings: []
 
@@ -170,7 +207,7 @@ class AddListings extends React.Component
             this.setState(prevState => ({
                 showListings: [prevState.showListings[0].sort(function (a, b)
                     {
-                        return parseInt(a.rent) - parseInt(b.rent);
+                        return parseFloat(a.rent) - parseFloat(b.rent);
                     }
                 )]
             }))
@@ -182,7 +219,7 @@ class AddListings extends React.Component
                     {
                         console.log(a.rent)
                         console.log(b.rent)
-                        return parseInt(b.rent) - parseInt(a.rent);
+                        return parseFloat(b.rent) - parseFloat(a.rent);
                     }
                 )]
             }))
@@ -206,22 +243,52 @@ class AddListings extends React.Component
         {
             for (let key = 0; key < this.state.selectedKeys.length; key++)
             {
-                if (this.state.selectedKeys[key] === 'byRooms1')
+                if (this.state.selectedKeys[key] === 'subletSummer')
                 {
                     this.setState(prevState => ({
                         showListings: [prevState.showListings[0].filter(function (el)
                             {
-                                return parseInt(el.numberRooms) === 1;
+                                return parseFloat(el.listingType) === "Sublet for Summer";
                             }
                         )]
                     }))
                 }
-                if (this.state.selectedKeys[key] === 'byRooms2')
+                else if (this.state.selectedKeys[key] === 'subletWinter')
                 {
                     this.setState(prevState => ({
                         showListings: [prevState.showListings[0].filter(function (el)
                             {
-                                return parseInt(el.numberRooms) >= 2;
+                                return parseFloat(el.listingType) === "Sublet for Winter";
+                            }
+                        )]
+                    }))
+                }
+                else if (this.state.selectedKeys[key] === 'lease')
+                {
+                    this.setState(prevState => ({
+                        showListings: [prevState.showListings[0].filter(function (el)
+                            {
+                                return parseFloat(el.listingType) === "Lease";
+                            }
+                        )]
+                    }))
+                }
+                else if (this.state.selectedKeys[key] === 'byRooms1')
+                {
+                    this.setState(prevState => ({
+                        showListings: [prevState.showListings[0].filter(function (el)
+                            {
+                                return parseFloat(el.numberRooms) === 1;
+                            }
+                        )]
+                    }))
+                }
+                else if (this.state.selectedKeys[key] === 'byRooms2')
+                {
+                    this.setState(prevState => ({
+                        showListings: [prevState.showListings[0].filter(function (el)
+                            {
+                                return parseFloat(el.numberRooms) >= 2;
                             }
                         )]
                     }))
@@ -231,7 +298,7 @@ class AddListings extends React.Component
                     this.setState(prevState => ({
                         showListings: [prevState.showListings[0].filter(function (el)
                             {
-                                return parseInt(el.numberRooms) >= 3;
+                                return parseFloat(el.numberRooms) >= 3;
                             }
                         )]
                     }))
@@ -242,7 +309,7 @@ class AddListings extends React.Component
                     this.setState(prevState => ({
                         showListings: [prevState.showListings[0].filter(function (el)
                             {
-                                return parseInt(el.numberBathrooms) === 1;
+                                return parseFloat(el.numberBathrooms) === 1;
                             }
                         )]
                     }))
@@ -253,7 +320,7 @@ class AddListings extends React.Component
                     this.setState(prevState => ({
                         showListings: [prevState.showListings[0].filter(function (el)
                             {
-                                return parseInt(el.numberBathrooms) >= 2;
+                                return parseFloat(el.numberBathrooms) >= 2;
                             }
                         )]
                     }))
@@ -263,7 +330,7 @@ class AddListings extends React.Component
                     this.setState(prevState => ({
                         showListings: [prevState.showListings[0].filter(function (el)
                             {
-                                return parseInt(el.numberBathrooms) >= 3;
+                                return parseFloat(el.numberBathrooms) >= 3;
                             }
                         )]
                     }))
@@ -323,7 +390,7 @@ class AddListings extends React.Component
     writeUserData = () =>
     {
         if (!(document.getElementById("addressBox").value === "") && !(document.getElementById("nameBox").value === "") &&
-            !(document.getElementById("rentBox").value === ""))
+            !(document.getElementById("rentBox").value === "") && !(this.state.typeKey === ""))
         {
             if(this.state.listAddresses[0].includes(document.getElementById("addressBox").value.toLowerCase()))
             {
@@ -346,7 +413,8 @@ class AddListings extends React.Component
                             photo: url,
                             details: document.getElementById("detailBox").value,
                             numberRooms: document.getElementById("roomBox").value,
-                            numberBathrooms: document.getElementById("bathroomBox").value
+                            numberBathrooms: document.getElementById("bathroomBox").value,
+                            listingType: this.state.typeText
                         });
 
                         alert("Success! Please refresh page to see changes!")
@@ -355,11 +423,29 @@ class AddListings extends React.Component
 
             }
         }
+        else
+        {
+            alert("Missing Required fields")
+        }
     }
 
     enable = () =>
     {
         this.setState(prevState => ({able: !prevState.able}));
+    }
+
+    onChangeSelect = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption) =>
+    {
+        if(item)
+        {
+            this.setState(prevState => ({
+                typeKey: item.key.toString()
+            }))
+            this.setState(prevState => ({
+                typeText: item.text.toString()
+            }))
+        }
+
     }
 
     onChangeSort = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption) =>
@@ -433,12 +519,28 @@ class AddListings extends React.Component
                                  if (value==="") {
                                      return 'This field is required';
                                  }
+                                 else if(isNaN(parseFloat(value)))
+                                 {
+                                     return "Please enter as a number"
+                                 }
+                                 else if (value.includes(","))
+                                 {
+                                     return "Enter the number without any commas"
+                                 }
                              }}/>
                          </Stack>
                          <Stack {...columnProps2}>
                              <TextField label="Rent" required id={"rentBox"} onGetErrorMessage={value => {
                                  if (value==="") {
                                      return 'This field is required';
+                                 }
+                                 else if(isNaN(parseFloat(value)))
+                                 {
+                                     return "Please enter as a number"
+                                 }
+                                 else if (value.includes(","))
+                                 {
+                                     return "Enter the number without any commas"
                                  }
                              }}/>
                              <TextField label="Short Paragraph for Details" multiline autoAdjustHeight required id={"detailBox"} onGetErrorMessage={value => {
@@ -450,7 +552,25 @@ class AddListings extends React.Component
                                  if (value==="") {
                                      return 'This field is required';
                                  }
+                                 else if(isNaN(parseFloat(value)))
+                                 {
+                                     return "Please enter as a number"
+                                 }
+                                 else if (value.includes(","))
+                                 {
+                                     return "Enter the number without any commas"
+                                 }
                              }}/>
+
+                             <Dropdown
+                                 placeholder="Select Type"
+                                 label="Type of Listing"
+                                 selectedKey={this.state.typeKey}
+                                 // eslint-disable-next-line react/jsx-no-bind
+                                 onChange={this.onChangeSelect}
+                                 options={typeProps}
+                                 styles={dropdownStyles}
+                             />
                          </Stack>
                      </div>
                      <br/>
@@ -536,7 +656,7 @@ class AddListings extends React.Component
                     <ul>
                         {this.state.showListings[0].map((data) => (
                             <li key={data.address}>
-                                <SingleList description={data.description} name={data.name} address={data.address} email={data.email} rent={data.rent} image={data.photo} details={data.details} rooms={data.numberRooms} bathrooms={data.numberBathrooms}/>
+                                <SingleList description={data.description} name={data.name} address={data.address} email={data.email} rent={data.rent} image={data.photo} details={data.details} rooms={data.numberRooms} bathrooms={data.numberBathrooms} type={data.listingType}/>
                             </li>
                             ))}
                     </ul>
@@ -571,12 +691,28 @@ class AddListings extends React.Component
                             if (value==="") {
                                 return 'This field is required';
                             }
+                            else if(isNaN(parseFloat(value)))
+                            {
+                                return "Please enter as a number"
+                            }
+                            else if (value.includes(","))
+                            {
+                                return "Enter the number without any commas"
+                            }
                         }}/>
                     </Stack>
                     <Stack {...columnProps2}>
                         <TextField label="Rent" required id={"rentBox"} onGetErrorMessage={value => {
                             if (value==="") {
                                 return 'This field is required';
+                            }
+                            else if(isNaN(parseFloat(value)))
+                            {
+                                return "Please enter as a number"
+                            }
+                            else if (value.includes(","))
+                            {
+                                return "Enter the number without any commas"
                             }
                         }}/>
                         <TextField label="Short Paragraph for Details" multiline autoAdjustHeight required id={"detailBox"} onGetErrorMessage={value => {
@@ -588,7 +724,26 @@ class AddListings extends React.Component
                             if (value==="") {
                                 return 'This field is required';
                             }
+                            else if(isNaN(parseFloat(value)))
+                            {
+                                return "Please enter as a number"
+                            }
+                            else if (value.includes(","))
+                            {
+                                return "Enter the number without any commas"
+                            }
                         }}/>
+
+                        <Dropdown
+                            placeholder="Select Type"
+                            label="Type of Listing"
+                            selectedKey={this.state.typeKey}
+                            // eslint-disable-next-line react/jsx-no-bind
+                            onChange={this.onChangeSelect}
+                            options={typeProps}
+                            styles={dropdownStyles}
+                        />
+
                     </Stack>
                     </div>
                     <br/>

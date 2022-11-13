@@ -70,9 +70,29 @@ class Profile extends React.Component
             }
     }
 
+    makeArray = () =>
+    {
+        let emailNow = this.props.userNow[0].email
+        let tempList = []
+        this.props.listings[0].map((function(elem)
+        {
+            if(elem.email === emailNow)
+            {
+                tempList.push(elem)
+            }
+        }))
+        console.log(tempList)
+        this.setState(prevState => ({
+            myListings: [...prevState.myListings, tempList]
+        }))
+    }
+
     enable = () =>
     {
+        console.log(this.props.listings[0])
+        this.makeArray();
         this.setState(prevState => ({truth: !prevState.truth}));
+
     }
     render()
     {
@@ -125,6 +145,7 @@ class Profile extends React.Component
             }
             else
             {
+                console.log(this.state.myListings)
                 return (
                     <>
                         <div style={{position: 'relative'}}>
@@ -143,9 +164,10 @@ class Profile extends React.Component
                             </div>
                         </div>
                         <ul>
-                            {this.props.listings[0].map((data) => (
+                            {this.state.myListings[0].map((data) => (
+
                                 <li key={data.address}>
-                                    <SingleList2 description={data.description} name={data.name} address={data.address} email={data.email} rent={data.rent} image={data.photo} details={data.details} rooms={data.numberRooms} bathrooms={data.numberBathrooms}  userNow={this.props.userNow}/>
+                                    <SingleList2 description={data.description} name={data.name} address={data.address} email={data.email} rent={data.rent} image={data.photo} details={data.details} rooms={data.numberRooms} bathrooms={data.numberBathrooms}  userNow={this.props.userNow} type={data.listingType}/>
                                 </li>
                             ))}
                         </ul>

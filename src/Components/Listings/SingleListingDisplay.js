@@ -8,7 +8,7 @@ import {IIconProps, initializeIcons} from "@fluentui/react";
 
 
 const columnProps: Partial<IStackProps> = {
-    styles: { root: { maxWidth: "53vh" } },
+    styles: { root: { maxWidth: "53vh" }, tokens: { childrenGap:15 } },
 };
 
 const mailIcon: IIconProps = { iconName: 'Mail' };
@@ -84,19 +84,22 @@ class SingleList extends React.Component
         return (
             <>
                 <Box bgcolor="white" p={1} border={2} marginRight={10} marginLeft={10}>
-                    <b style={{textAlign: "center", fontSize: '150%', marginLeft: "5%"}}>{this.props.description}</b>
-                    
+                    <b style={{textAlign: "center", fontSize: '150%', marginLeft: "1%"}}>{this.props.description}</b>
+
                     <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
-                    <b style={{textAlign: "left", fontSize: '120%', marginLeft: "5%", color: "grey"}}>{this.props.address}</b>
+                        <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}> {this.props.type}</b>
                     </div>
 
                     <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
-                    <b style={{textAlign: "left", fontSize: '120%', marginLeft: "5%", color: "grey"}}>{this.props.name}</b>
+                        <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}>{this.props.address}</b>
                     </div>
 
                     <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
-                        <IconButton iconProps = {mailIcon}/>
-                        <b style={{textAlign: "left", fontSize: '120%', marginLeft: "5%", color: "grey"}}>{this.props.email} </b>
+                        <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}>{this.props.name}</b>
+                    </div>
+
+                    <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
+                        <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}>{this.props.email}</b>
                     </div>
 
                     <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
@@ -149,6 +152,7 @@ class SingleList extends React.Component
                         <div className={contentStyles.body}>
                             <Stack {...columnProps}>
                                 <p><b>Address:</b> {this.props.address} </p>
+                                <p><b>Type of Listing: </b> {this.props.type}</p>
                                 <p><b>Contact Name:</b> {this.props.name}</p>
                                 <p><b>Contact Information:</b> {this.props.email}  </p>
                                 <p><b>Rent:</b> {this.props.rent}  </p>
