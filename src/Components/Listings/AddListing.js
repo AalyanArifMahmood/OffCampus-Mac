@@ -248,32 +248,32 @@ class AddListings extends React.Component
                     this.setState(prevState => ({
                         showListings: [prevState.showListings[0].filter(function (el)
                             {
-                                return parseFloat(el.listingType) === "Sublet for Summer";
+                                return el.listingType === "Sublet for Summer";
                             }
                         )]
                     }))
                 }
-                else if (this.state.selectedKeys[key] === 'subletWinter')
+                if (this.state.selectedKeys[key] === 'subletWinter')
                 {
                     this.setState(prevState => ({
                         showListings: [prevState.showListings[0].filter(function (el)
                             {
-                                return parseFloat(el.listingType) === "Sublet for Winter";
+                                return el.listingType === "Sublet for Winter";
                             }
                         )]
                     }))
                 }
-                else if (this.state.selectedKeys[key] === 'lease')
+                if (this.state.selectedKeys[key] === 'Lease')
                 {
                     this.setState(prevState => ({
                         showListings: [prevState.showListings[0].filter(function (el)
                             {
-                                return parseFloat(el.listingType) === "Lease";
+                                return el.listingType === "Lease";
                             }
                         )]
                     }))
                 }
-                else if (this.state.selectedKeys[key] === 'byRooms1')
+                if (this.state.selectedKeys[key] === 'byRooms1')
                 {
                     this.setState(prevState => ({
                         showListings: [prevState.showListings[0].filter(function (el)
@@ -283,7 +283,7 @@ class AddListings extends React.Component
                         )]
                     }))
                 }
-                else if (this.state.selectedKeys[key] === 'byRooms2')
+                if (this.state.selectedKeys[key] === 'byRooms2')
                 {
                     this.setState(prevState => ({
                         showListings: [prevState.showListings[0].filter(function (el)
@@ -293,7 +293,7 @@ class AddListings extends React.Component
                         )]
                     }))
                 }
-                else if (this.state.selectedKeys[key] === 'byRooms3')
+                if (this.state.selectedKeys[key] === 'byRooms3')
                 {
                     this.setState(prevState => ({
                         showListings: [prevState.showListings[0].filter(function (el)
@@ -304,7 +304,7 @@ class AddListings extends React.Component
                     }))
 
                 }
-                else if (this.state.selectedKeys[key] === 'byBathrooms1')
+                if (this.state.selectedKeys[key] === 'byBathrooms1')
                 {
                     this.setState(prevState => ({
                         showListings: [prevState.showListings[0].filter(function (el)
@@ -314,9 +314,8 @@ class AddListings extends React.Component
                         )]
                     }))
                 }
-                else if (this.state.selectedKeys[key] === 'byBathrooms2')
+                if (this.state.selectedKeys[key] === 'byBathrooms2')
                 {
-                    console.log("reached bathroom2")
                     this.setState(prevState => ({
                         showListings: [prevState.showListings[0].filter(function (el)
                             {
@@ -325,7 +324,7 @@ class AddListings extends React.Component
                         )]
                     }))
                 }
-                else if (this.state.selectedKeys[key] === 'byBathrooms3')
+                if (this.state.selectedKeys[key] === 'byBathrooms3')
                 {
                     this.setState(prevState => ({
                         showListings: [prevState.showListings[0].filter(function (el)
@@ -602,6 +601,7 @@ class AddListings extends React.Component
         }
         else
         {
+            console.log(this.state.selectedKeys)
             return (
                 <>
                     <div style={{position: 'relative'}}>
