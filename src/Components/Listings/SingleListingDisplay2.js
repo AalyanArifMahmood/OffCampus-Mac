@@ -64,8 +64,12 @@ const contentStyles = mergeStyleSets({
 });
 
 const columnProps: Partial<IStackProps> = {
-    tokens: { childrenGap:25 },
+    tokens: { childrenGap:15 },
     styles: { root: { width: "70vw", marginBottom: 10} },
+};
+
+const columnProps4: Partial<IStackProps> = {
+    styles: { root: { maxWidth: "53vh" }, tokens: { childrenGap:15 } },
 };
 
 const columnProps2: Partial<IStackProps> = {
@@ -192,19 +196,23 @@ class SingleList2 extends React.Component
     {
         return (
             <>
-                <Box bgcolor="white" p={1} border={2} marginRight={10} marginLeft={10}>
-                    <b style={{textAlign: "center", fontSize: '150%', marginLeft: "5%"}}>{this.props.description}</b>
+                <Box bgcolor="white" p={1} border={2} marginRight={12} marginLeft={10}>
+                    <b style={{textAlign: "center", fontSize: '150%', marginLeft: "1%"}}>{this.props.description}</b>
 
                     <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
-                        <b style={{textAlign: "left", fontSize: '120%', marginLeft: "5%", color: "grey"}}>{this.props.address}</b>
+                        <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}> {this.props.type}</b>
                     </div>
 
                     <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
-                        <b style={{textAlign: "left", fontSize: '120%', marginLeft: "5%", color: "grey"}}>{this.props.name}</b>
+                        <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}>{this.props.address}</b>
                     </div>
 
                     <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
-                        <b style={{textAlign: "left", fontSize: '120%', marginLeft: "5%", color: "grey"}}>{this.props.email}</b>
+                        <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}>{this.props.name}</b>
+                    </div>
+
+                    <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
+                        <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}>{this.props.email}</b>
                     </div>
 
                     <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
@@ -255,8 +263,9 @@ class SingleList2 extends React.Component
                             />
                         </div>
                         <div className={contentStyles.body}>
-                            <Stack {...columnProps}>
+                            <Stack {...columnProps4}>
                                 <p><b>Address:</b> {this.props.address} </p>
+                                <p><b>Type of Listing: </b> {this.props.type}</p>
                                 <p><b>Contact Name:</b> {this.props.name}</p>
                                 <p><b>Contact Information:</b> {this.props.email}  </p>
                                 <p><b>Rent:</b> {this.props.rent}  </p>
@@ -296,13 +305,49 @@ class SingleList2 extends React.Component
                                     <TextField placeholder={this.props.description} label="Name of Listing" autoAdjustHeight required id={"descriptionsBox"}/>
                                     <TextField placeholder={this.props.name} label="Name " required id={"namesBox"}/>
                                     <TextField placeholder={this.props.address} label="Listing Address" required id={"addresssBox"}/>
-                                    <TextField placeholder={this.props.rooms} label="Number Of Rooms" required id={"roomsBox"}/>
+                                    <TextField placeholder={this.props.rooms} label="Number Of Rooms" required id={"roomsBox"} onGetErrorMessage={value => {
+                                        if (value==="") {
+                                            return 'This field is required';
+                                        }
+                                        else if(isNaN(parseFloat(value)))
+                                        {
+                                            return "Please enter as a number"
+                                        }
+                                        else if (value.includes(","))
+                                        {
+                                            return "Enter the number without any commas"
+                                        }
+                                    }}/>
                                 </Stack>
                                 <Stack {...columnProps}>
                                     <TextField placeholder={this.props.email} label="Contact Email" required mask="m\ask: @macalester.edu" id={"emailsBox"} suffix="@macalester.edu"/>
-                                    <TextField placeholder={this.props.rent} label="Rent" required id={"rentsBox"}/>
+                                    <TextField placeholder={this.props.rent} label="Rent" required id={"rentsBox"} onGetErrorMessage={value => {
+                                        if (value==="") {
+                                            return 'This field is required';
+                                        }
+                                        else if(isNaN(parseFloat(value)))
+                                        {
+                                            return "Please enter as a number"
+                                        }
+                                        else if (value.includes(","))
+                                        {
+                                            return "Enter the number without any commas"
+                                        }
+                                    }}/>
                                     <TextField placeholder={this.props.details} label="Short Paragraph for Details" autoAdjustHeight required id={"detailsBox"}/>
-                                    <TextField placeholder={this.props.bathrooms} label="Number Of Bathrooms" required id={"bathroomsBox"}/>
+                                    <TextField placeholder={this.props.bathrooms} label="Number Of Bathrooms" required id={"bathroomsBox"} onGetErrorMessage={value => {
+                                        if (value==="") {
+                                            return 'This field is required';
+                                        }
+                                        else if(isNaN(parseFloat(value)))
+                                        {
+                                            return "Please enter as a number"
+                                        }
+                                        else if (value.includes(","))
+                                        {
+                                            return "Enter the number without any commas"
+                                        }
+                                    }}/>
                                 </Stack>
                             </div>
                             {/*<div>*/}
