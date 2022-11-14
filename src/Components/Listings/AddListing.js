@@ -388,8 +388,17 @@ class AddListings extends React.Component
 
     writeUserData = () =>
     {
+        if(!(document.getElementById("rentBox").value.includes(",")))
+        {
+            console.log("tis okay")
+        }
+
         if (!(document.getElementById("addressBox").value === "") && !(document.getElementById("nameBox").value === "") &&
-            !(document.getElementById("rentBox").value === "") && !(this.state.typeKey === ""))
+            !(document.getElementById("rentBox").value === "") && !(isNaN(parseFloat(document.getElementById("rentBox").value)))
+            && !(document.getElementById("rentBox").value.includes(",")) && !(document.getElementById("bathroomBox").value === "")
+            && !(document.getElementById("roomBox").value === "") && !(isNaN(parseFloat(document.getElementById("bathroomBox").value)))
+            && !(isNaN(parseFloat(document.getElementById("roomBox").value))) && !(this.state.typeKey === "")
+            && !(document.getElementById("detailBox").value === "")  && !(document.getElementById("descriptionBox").value === "") && !(this.state.files.length === 0))
         {
             if(this.state.listAddresses[0].includes(document.getElementById("addressBox").value.toLowerCase()))
             {
@@ -424,7 +433,7 @@ class AddListings extends React.Component
         }
         else
         {
-            alert("Missing Required fields")
+            alert("Missing Required fields or Incorrect Format")
         }
     }
 

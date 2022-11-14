@@ -7,6 +7,7 @@ import {IButtonStyles} from "@fluentui/react";
 import {IIconProps} from "@fluentui/react";
 import { getDatabase, ref, set, onValue, remove } from "firebase/database";
 import {initializeApp} from "firebase/app";
+import {Dropdown, DropdownMenuItemType, IDropdownOption, IDropdownStyles} from "@fluentui/react/lib/Dropdown";
 
 
 // const columnProps: Partial<IStackProps> = {
@@ -63,6 +64,32 @@ const contentStyles = mergeStyleSets({
     },
 });
 
+const typeProps = [
+    {
+        key: 'typeHeader',
+        text: 'Type of Listing',
+        itemType: DropdownMenuItemType.Header
+    },
+    {
+        key: "",
+        text: ""
+    },
+    {
+        key: 'lease',
+        text: 'Lease'
+    },
+    {
+        key: 'winterSublet',
+        text: 'Sublet for Winter'
+    },
+    {
+        key: 'summerSublet',
+        text: 'Sublet for Summer'
+    }
+];
+
+const dropdownStyles: Partial<IDropdownStyles> = { dropdown: { width: 300 } };
+
 const columnProps: Partial<IStackProps> = {
     tokens: { childrenGap:15 },
     styles: { root: { width: "70vw", marginBottom: 10} },
@@ -106,8 +133,24 @@ class SingleList2 extends React.Component
                 editModalOpen: false,
                 deleteModalOpen: false,
                 files: [],
-                open: false
+                open: false,
+                typeKey: '',
+                typeText: ''
             }
+
+    }
+
+    onChangeSelect = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption) =>
+    {
+        if(item)
+        {
+            this.setState(prevState => ({
+                typeKey: item.key.toString()
+            }))
+            this.setState(prevState => ({
+                typeText: item.text.toString()
+            }))
+        }
 
     }
 
@@ -126,34 +169,40 @@ class SingleList2 extends React.Component
     {
         remove(ref(database, 'items/' + this.props.address)).then(() =>
         {
-            console.log(document.getElementById("descriptionBox").value);
-
             let newDescription = document.getElementById("descriptionsBox").value === "" ? this.props.description : document.getElementById("descriptionsBox").value;
             let newAddress = document.getElementById("addresssBox").value === "" ? this.props.address : document.getElementById("addresssBox").value;
             let newName = document.getElementById("namesBox").value === "" ? this.props.name : document.getElementById("namesBox").value;
             let newRooms = document.getElementById("roomsBox").value === "" ? this.props.rooms : document.getElementById("roomsBox").value;
-            let newEmail = document.getElementById("emailsBox").value === "" ? this.props.email : document.getElementById("emailsBox").value + "@macalester.edu";
+            let newEmail = this.props.userNow[0].email;
             let newRent = document.getElementById("rentsBox").value === "" ? this.props.rent : document.getElementById("rentsBox").value;
             let newDetails = document.getElementById("detailsBox").value === "" ? this.props.details : document.getElementById("detailsBox").value;
             let newBathRooms = document.getElementById("bathroomsBox").value === "" ? this.props.bathrooms : document.getElementById("bathroomsBox").value;
-            console.log(newRent)
-            set(ref(database, 'items/' + newAddress), {
-                description:  newDescription,
-                name: newName,
-                email: newEmail,
-                address: newAddress,
-                rent: newRent,
-                photo: this.props.image,
-                details: newDetails,
-                numberRooms: newRooms,
-                numberBathrooms: newBathRooms
-            }).then(() =>
+            let newKey = this.state.typeKey === "" ? this.props.type : this.state.typeText
+            if (!isNaN(parseFloat(newRent)) && !isNaN(parseFloat(newRooms)) && !isNaN(parseFloat(newBathRooms)) && !(newRent.includes(",")))
             {
-                alert("Success! Please refresh page to see changes!");
-                this.openEditModal();
-                this.setToTrue();
-                return "";
-            })
+                set(ref(database, 'items/' + newAddress), {
+                    description:  newDescription,
+                    name: newName,
+                    email: newEmail,
+                    address: newAddress,
+                    rent: newRent,
+                    photo: this.props.image,
+                    details: newDetails,
+                    numberRooms: newRooms,
+                    numberBathrooms: newBathRooms,
+                    listingType: newKey
+                }).then(() =>
+                {
+                    alert("Success! Please refresh page to see changes!");
+                    this.openEditModal();
+                    this.setToTrue();
+                    return "";
+                })
+            }
+            else
+            {
+                alert("Incorrect format")
+            }
         })
     }
 
@@ -302,14 +351,11 @@ class SingleList2 extends React.Component
                             {/*<h1 style={{textAlign: "center"}}>Edit This Listing</h1>*/}
                             <div style={{display: "flex", justifyContent: "space-evenly", marginLeft: "4%", marginRight: "4%", marginTop: "2%"}}>
                                 <Stack {...columnProps}>
-                                    <TextField placeholder={this.props.description} label="Name of Listing" autoAdjustHeight required id={"descriptionsBox"}/>
-                                    <TextField placeholder={this.props.name} label="Name " required id={"namesBox"}/>
-                                    <TextField placeholder={this.props.address} label="Listing Address" required id={"addresssBox"}/>
-                                    <TextField placeholder={this.props.rooms} label="Number Of Rooms" required id={"roomsBox"} onGetErrorMessage={value => {
-                                        if (value==="") {
-                                            return 'This field is required';
-                                        }
-                                        else if(isNaN(parseFloat(value)))
+                                    <TextField placeholder={this.props.description} label="Name of Listing" autoAdjustHeight id={"descriptionsBox"}/>
+                                    <TextField placeholder={this.props.name} label="Name " id={"namesBox"}/>
+                                    <TextField placeholder={this.props.address} label="Listing Address"  id={"addresssBox"}/>
+                                    <TextField placeholder={this.props.rooms} label="Number Of Rooms" id={"roomsBox"} onGetErrorMessage={value => {
+                                        if(value !== "" && isNaN(parseFloat(value)))
                                         {
                                             return "Please enter as a number"
                                         }
@@ -320,12 +366,8 @@ class SingleList2 extends React.Component
                                     }}/>
                                 </Stack>
                                 <Stack {...columnProps}>
-                                    <TextField placeholder={this.props.email} label="Contact Email" required mask="m\ask: @macalester.edu" id={"emailsBox"} suffix="@macalester.edu"/>
-                                    <TextField placeholder={this.props.rent} label="Rent" required id={"rentsBox"} onGetErrorMessage={value => {
-                                        if (value==="") {
-                                            return 'This field is required';
-                                        }
-                                        else if(isNaN(parseFloat(value)))
+                                    <TextField placeholder={this.props.rent} label="Rent" id={"rentsBox"} onGetErrorMessage={value => {
+                                        if( value !== "" && isNaN(parseFloat(value)))
                                         {
                                             return "Please enter as a number"
                                         }
@@ -334,12 +376,9 @@ class SingleList2 extends React.Component
                                             return "Enter the number without any commas"
                                         }
                                     }}/>
-                                    <TextField placeholder={this.props.details} label="Short Paragraph for Details" autoAdjustHeight required id={"detailsBox"}/>
-                                    <TextField placeholder={this.props.bathrooms} label="Number Of Bathrooms" required id={"bathroomsBox"} onGetErrorMessage={value => {
-                                        if (value==="") {
-                                            return 'This field is required';
-                                        }
-                                        else if(isNaN(parseFloat(value)))
+                                    <TextField placeholder={this.props.details} label="Short Paragraph for Details" autoAdjustHeight id={"detailsBox"}/>
+                                    <TextField placeholder={this.props.bathrooms} label="Number Of Bathrooms" id={"bathroomsBox"} onGetErrorMessage={value => {
+                                        if(value !== "" && isNaN(parseFloat(value)))
                                         {
                                             return "Please enter as a number"
                                         }
@@ -348,6 +387,15 @@ class SingleList2 extends React.Component
                                             return "Enter the number without any commas"
                                         }
                                     }}/>
+                                    <Dropdown
+                                        placeholder="Select Type"
+                                        label="Type of Listing"
+                                        selectedKey={this.state.typeKey}
+                                        // eslint-disable-next-line react/jsx-no-bind
+                                        onChange={this.onChangeSelect}
+                                        options={typeProps}
+                                        styles={dropdownStyles}
+                                    />
                                 </Stack>
                             </div>
                             {/*<div>*/}
