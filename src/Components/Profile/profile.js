@@ -6,11 +6,15 @@ import {GoogleAuthProvider,
 getAuth,
  signInWithRedirect}
 from "firebase/auth";
-
+import SingleList from "../Listings/SingleListingDisplay";
 import SingleList2 from "../Listings/SingleListingDisplay2";
+import {IStackProps, Stack} from '@fluentui/react/lib/Stack';
 
 // import {getFirestore, query, getDocs, collection, where, addDoc,} from "firebase/firestore";
 
+const columnProps: Partial<IStackProps> = {
+    styles: { root: { maxWidth: "53vh" }, tokens: { childrenGap:15 } },
+};
 
 const firebaseConfig = {
     apiKey: "AIzaSyCxyu7ou0WSzQYk63StiYtCVG-XtUPpqNs",
@@ -66,8 +70,16 @@ class Profile extends React.Component
         this.state =
             {
                 truth: false,
-                myListings: []
+                truthR: false,
+                myListings: [],
+                myReserved: [],
+                matches: window.matchMedia("(min-width: 680px)").matches
             }
+    }
+
+    componentDidMount() {
+        const handler = e => this.setState({matches: e.matches});
+        window.matchMedia("(min-width: 680px)").addEventListener('change', handler);
     }
 
     makeArray = () =>
@@ -87,13 +99,46 @@ class Profile extends React.Component
         }))
     }
 
+    makeReserveArray = () =>
+    {
+        let emailNow = this.props.userNow[0].email
+        let tempListReserve = []
+        this.props.listings[0].map((function(elem)
+        {
+            if(elem.reservedBy === emailNow)
+            {
+                tempListReserve.push(elem)
+            }
+        }))
+        this.setState(prevState => ({
+            myReserved: [...prevState.myReserved, tempListReserve]
+        }))
+
+    }
+
     enable = () =>
     {
+        console.log(this.state.truthR)
+        if(this.state.truthR)
+        {
+            this.setState(prevState => ({truthR: !prevState.truthR}));
+        }
         console.log(this.props.listings[0])
         this.makeArray();
         this.setState(prevState => ({truth: !prevState.truth}));
 
     }
+
+    enableReserve = () =>
+    {
+        if(this.state.truth)
+        {
+            this.setState(prevState => ({truth: !prevState.truth}));
+        }
+        this.makeReserveArray();
+        this.setState(prevState => ({truthR: !prevState.truthR}));
+    }
+
     render()
     {
         if (this.props.userNow.length === 0)
@@ -121,31 +166,75 @@ class Profile extends React.Component
             let photoUrl1 = photoUrl.replace(oldP, newP)
             if(!this.state.truth)
             {
-                return (
-                    <>
-                        <div style={{position: 'relative'}}>
-                            <div style={{textAlign: 'center', paddingLeft: '10%',bottom: '35%',paddingRight: '10%'}}>
-                                <section id={"profile"}>
-                                    <h1 style={{fontSize: '6vh', fontFamily: 'Newslab, georgia, Bakersville', color: '#000000'}}>{this.props.userNow[0].displayName}</h1>
-                                </section>
+                if(this.state.truthR)
+                {
+                    return (
+                        <>
+                            <div style={{position: 'relative'}}>
+                                <div style={{textAlign: 'center', paddingLeft: '10%',bottom: '35%',paddingRight: '10%'}}>
+                                    <section id={"profile"}>
+                                        <h1 style={{fontSize: '6vh', fontFamily: 'Newslab, georgia, Bakersville', color: '#000000'}}>{this.props.userNow[0].displayName}</h1>
+                                    </section>
+                                    <br/>
+                                </div>
+                                <div style={{textAlign: "center"}}>
+                                    <img src={photoUrl1} alt={"none"} style={{width: "30vh", height: "30vh", borderRadius: "100%"}}/>
+                                </div>
                                 <br/>
-                            </div>
-                            <div style={{textAlign: "center"}}>
-                                <img src={photoUrl1} alt={"none"} style={{width: "30vh", height: "30vh", borderRadius: "100%"}}/>
-                            </div>
-                            <br/>
-                            <div style={{textAlign: "center"}}>
-                                <PrimaryButton text="Show Your Listings" onClick={this.enable} allowDisabledFocus/>
-                            </div>
-                        </div>
-                        <div className="separator" />
-                    </>
 
-                )
+                                <div style={{textAlign: "center", display: "flex", justifyContent: "space-around"}}>
+                                    <PrimaryButton text="Show Your Listings" onClick={this.enable} allowDisabledFocus/>
+                                    <PrimaryButton text="Hide Your Reserved Listings" onClick={this.enableReserve} allowDisabledFocus/>
+                                </div>
+
+                            </div>
+                            <ul>
+                                {this.state.myReserved[0].map((data) => (
+
+                                    <li key={data.address}>
+                                        <SingleList description={data.description} name={data.name} address={data.address} email={data.email} rent={data.rent} image={data.photo} details={data.details} rooms={data.numberRooms} bathrooms={data.numberBathrooms}  userNow={this.props.userNow} type={data.listingType}/>
+                                    </li>
+                                ))}
+                            </ul>
+                            <div className="separator" />
+                        </>
+
+                    )
+                }
+                else
+                {
+                    return (
+                        <>
+                            <div style={{position: 'relative'}}>
+                                <div style={{textAlign: 'center', paddingLeft: '10%',bottom: '35%',paddingRight: '10%'}}>
+                                    <section id={"profile"}>
+                                        <h1 style={{fontSize: '6vh', fontFamily: 'Newslab, georgia, Bakersville', color: '#000000'}}>{this.props.userNow[0].displayName}</h1>
+                                    </section>
+                                    <br/>
+                                </div>
+                                <div style={{textAlign: "center"}}>
+                                    <img src={photoUrl1} alt={"none"} style={{width: "30vh", height: "30vh", borderRadius: "100%"}}/>
+                                </div>
+                                <br/>
+                                {this.state.matches && (
+                                    <div style={{textAlign: "center", display: "flex", justifyContent: "space-around"}}>
+                                    <PrimaryButton text="Show Your Listings" onClick={this.enable} allowDisabledFocus/>
+                                    <PrimaryButton text="Show Your Reserved Listings" onClick={this.enableReserve} allowDisabledFocus/>
+                                </div>)}
+                                {!this.state.matches && (
+                                    <div style={{textAlign: "center", display: "flex", marginLeft: "29%"}}>
+                                    <PrimaryButton style={{width: "15%"}} text="Your Listings" onClick={this.enable} allowDisabledFocus/>
+                                    <PrimaryButton style={{width: "15%", marginLeft: "10%"}} text="Reserved Listings" onClick={this.enableReserve} allowDisabledFocus/>
+                                </div>)}
+                            </div>
+                            <div className="separator" />
+                        </>
+
+                    )
+                }
             }
             else
             {
-                console.log(this.state.myListings)
                 return (
                     <>
                         <div style={{position: 'relative'}}>
@@ -159,15 +248,16 @@ class Profile extends React.Component
                                 <img src={photoUrl1} alt={"none"} style={{width: "30vh", height: "30vh", borderRadius: "100%"}}/>
                             </div>
                             <br/>
-                            <div style={{textAlign: "center"}}>
+                            <div style={{textAlign: "center", display: "flex", justifyContent: "space-around"}}>
                                 <PrimaryButton text="Hide Your Listings" onClick={this.enable} allowDisabledFocus/>
+                                <PrimaryButton text="Show Your Reserved Listings" onClick={this.enableReserve} allowDisabledFocus/>
                             </div>
                         </div>
                         <ul>
                             {this.state.myListings[0].map((data) => (
 
                                 <li key={data.address}>
-                                    <SingleList2 description={data.description} name={data.name} address={data.address} email={data.email} rent={data.rent} image={data.photo} details={data.details} rooms={data.numberRooms} bathrooms={data.numberBathrooms}  userNow={this.props.userNow} type={data.listingType}/>
+                                    <SingleList2 description={data.description} name={data.name} address={data.address} email={data.email} rent={data.rent} image={data.photo} details={data.details} rooms={data.numberRooms} bathrooms={data.numberBathrooms}  userNow={this.props.userNow} type={data.listingType} reserved={data.reservedBy}/>
                                 </li>
                             ))}
                         </ul>

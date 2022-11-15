@@ -4,6 +4,12 @@ ul {
     padding-inline-start: 0;
 }
 
+.image-nav
+{
+    display: none;
+}
+
+
 .desktop-navigation {
     font-family: 'Ubuntu', sans-serif;
     position: fixed;
@@ -21,9 +27,9 @@ ul {
     display: none;
 }
 
-.desktop-navigation > img {
-    display: none;
-}
+/*.desktop-navigation > img {*/
+/*    display: none;*/
+/*}*/
 
 
 .desktop-navigation > ul {
@@ -53,6 +59,15 @@ ul {
     color: #1b2e50;
 }
 
+@media only screen and (min-width: 680px) {
+    .image-nav
+    {
+        max-height: 60px;
+        max-width: 60px;
+    }
+    
+}
+
 @media (min-width: 680px) {
     .desktop-navigation {
         left: 0;
@@ -70,6 +85,8 @@ ul {
     .desktop-navigation > img {
         display: block;
         margin-left: 5%;
+        max-height: 60px;
+        max-width: 60px;
     }
 
     .desktop-navigation > ul {

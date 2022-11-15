@@ -1,10 +1,37 @@
 import React from 'react'
 import Box from '@material-ui/core/Box';
 import {IStackProps, Stack} from '@fluentui/react/lib/Stack';
-import { PrimaryButton, IconButton } from '@fluentui/react/lib/Button';
+import {PrimaryButton, IconButton, DefaultButton} from '@fluentui/react/lib/Button';
 import {   Modal, IDragOptions, getTheme, mergeStyleSets, FontWeights,} from '@fluentui/react';
 import {IButtonStyles} from "@fluentui/react";
 import {IIconProps, initializeIcons} from "@fluentui/react";
+import { getDatabase, ref, set, onValue, remove } from "firebase/database";
+import {initializeApp} from "firebase/app";
+
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCxyu7ou0WSzQYk63StiYtCVG-XtUPpqNs",
+    authDomain: "offcampusatmac.firebaseapp.com",
+    projectId: "offcampusatmac",
+    storageBucket: "offcampusatmac.appspot.com",
+    messagingSenderId: "546109308935",
+    appId: "1:546109308935:web:a52c2ee6d7cc1bae822aa2",
+    measurementId: "G-7CFVGFQXE8",
+    databaseURL: "https://offcampusatmac-default-rtdb.firebaseio.com/"
+};
+
+const columnProps3: Partial<IStackProps> = {
+    tokens: { childrenGap:20 },
+    styles: { root: { width: "10vw", marginBottom: 10, marginLeft: "6vw"} },
+};
+
+const columnProps2: Partial<IStackProps> = {
+    tokens: { childrenGap:20 },
+    styles: { root: { width: "20vw", marginBottom: 10, marginLeft: "6vw"} },
+};
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
 
 
 const columnProps: Partial<IStackProps> = {
@@ -69,10 +96,46 @@ class SingleList extends React.Component
         super(props);
         this.state =
             {
-                extend: false
+                extend: false,
+                modalOpen: false
             }
 
     }
+
+    giveToUser = () =>
+    {
+        if(this.props.email !== this.props.userNow[0].email)
+        {
+            set(ref(database, 'items/' + this.props.address), {
+                description: this.props.description,
+                name: this.props.name,
+                email: this.props.email,
+                address: this.props.address,
+                rent: this.props.rent,
+                photo: this.props.image,
+                details: this.props.details,
+                numberRooms: this.props.rooms,
+                numberBathrooms: this.props.bathrooms,
+                listingType: this.props.type,
+                reservedBy: this.props.userNow[0].email
+            }).then(() =>
+            {
+                alert("You have successfully reserved this Listing and the owner has been contacted. Please refresh page to see changes")
+                this.openDeleteModal();
+            });
+        }
+        else
+        {
+            alert("Error: You cannot reserve your own listing")
+        }
+    }
+
+    openDeleteModal = () =>
+    {
+        this.setState(prevState => ({modalOpen: !prevState.modalOpen}));
+    }
+
+
 
     setToTrue = () =>
     {
@@ -130,9 +193,37 @@ class SingleList extends React.Component
                             <p><b>Number Of Rooms:</b> {this.props.rooms}  </p>
                             <p><b>Number Of Bathrooms:</b> {this.props.bathrooms}  </p>
                         </Stack> */}
-                        <img src={this.props.image} alt="Nothing" style={{width: '24%', height: '19%', boxShadow: '1px 12px 9px #6f6f6f', borderRadius: '6%'}} />
+                        <img src={this.props.image} alt="Nothing" style={{width: '35%', height: '25%', boxShadow: '1px 12px 9px #6f6f6f', borderRadius: '6%'}} />
                     </div>
-                    <PrimaryButton text="More Info" onClick={this.setToTrue} style={{width: '16vh', marginLeft: "45%"}} allowDisabledFocus/>
+                    <Stack horizontal {...columnProps2}>
+                        <PrimaryButton text="More Info" onClick={this.setToTrue} style={{width: '25vh', marginLeft: "47%"}} allowDisabledFocus/>
+                        <PrimaryButton text="Reserve" onClick={this.openDeleteModal} style={{width: '16vh', marginLeft: "45%"}} allowDisabledFocus/>
+                    </Stack>
+
+                    <Modal
+                        isOpen={this.state.modalOpen}
+                        onDismiss={this.openDeleteModal}
+                        containerClassName={contentStyles.container}
+                        isBlocking={false}
+                        dragOptions={true}>
+
+                        <div className={contentStyles.header}>
+                            <span>Reserve This Listing</span>
+                            <IconButton
+                                styles={iconButtonStyles}
+                                iconProps={cancelIcon}
+                                ariaLabel="Close popup modal"
+                                onClick={this.openDeleteModal}
+                            />
+                        </div>
+                        <div className={contentStyles.body}>
+                            <h3> Confirm this listing?</h3>
+                        </div>
+                        <Stack horizontal {...columnProps3}>
+                            <DefaultButton text="Cancel" onClick={this.openDeleteModal}/>
+                            <PrimaryButton text="Confirm" onClick={this.giveToUser} style={{width: '16vh'}} allowDisabledFocus/>
+                        </Stack>
+                    </Modal>
                     <Modal
                     isOpen={this.state.extend}
                     onDismiss={this.setToTrue}

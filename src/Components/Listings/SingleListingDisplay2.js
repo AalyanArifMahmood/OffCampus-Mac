@@ -190,7 +190,8 @@ class SingleList2 extends React.Component
                     details: newDetails,
                     numberRooms: newRooms,
                     numberBathrooms: newBathRooms,
-                    listingType: newKey
+                    listingType: newKey,
+                    reservedBy: this.props.reserved
                 }).then(() =>
                 {
                     alert("Success! Please refresh page to see changes!");
@@ -320,6 +321,7 @@ class SingleList2 extends React.Component
                                 <p><b>Rent:</b> {this.props.rent}  </p>
                                 <p><b>Number Of Rooms:</b> {this.props.rooms}  </p>
                                 <p><b>Number Of Bathrooms:</b> {this.props.bathrooms}  </p>
+                                <p><b>Reserved by: </b> {this.props.reservedBy === "" ? "None" : this.props.reserved}</p>
                             </Stack>
                             <img src={this.props.image} alt="Nothing" style={{width: '30%', height: '25%', boxShadow: '1px 12px 9px #6f6f6f', borderRadius: '6%'}} />
                         </div>

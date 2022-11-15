@@ -29,6 +29,8 @@ const firebaseConfig = {
 
 
 const dropdownStyles: Partial<IDropdownStyles> = { dropdown: { width: 300 } };
+const dropdownStylesPhone: Partial<IDropdownStyles> = { dropdown: { width: 240 } };
+const dropdownStylesPhone2: Partial<IDropdownStyles> = { dropdown: { width: 160 } };
 initializeIcons()
 
 const filterProps = [
@@ -151,6 +153,11 @@ const columnProps: Partial<IStackProps> = {
     styles: { root: { width: 300} },
 };
 
+const columnPropsPhone: Partial<IStackProps> = {
+    tokens: { childrenGap: 15 },
+    styles: { root: { width: 240, marginLeft: "25%"} },
+};
+
 const columnProps2: Partial<IStackProps> = {
     tokens: { childrenGap: 15 },
     styles: { root: { width: 300} },
@@ -184,12 +191,15 @@ class AddListings extends React.Component
             typeKey: '',
             typeText: '',
             userNow: [],
-            userListings: []
+            userListings: [],
+            matches: window.matchMedia("(min-width: 680px)").matches
 
         }
     }
 
     componentDidMount() {
+        const handler = e => this.setState({matches: e.matches});
+        window.matchMedia("(min-width: 680px)").addEventListener('change', handler);
         this.readUserData();
     }
 
@@ -345,10 +355,16 @@ class AddListings extends React.Component
 
         const listRef = ref(database, 'items');
         let tempListings = []
+        let tempShowListings = []
         let tempAddresses = []
         onValue(listRef, (snapshot) => {
             snapshot.forEach(function(childSnapshot)
             {
+                console.log(childSnapshot.val().reservedBy)
+                if(childSnapshot.val().reservedBy === "None")
+                {
+                    tempShowListings.push(childSnapshot.val())
+                }
                 tempListings.push(childSnapshot.val())
                 tempAddresses.push(childSnapshot.val().address.toLowerCase())
 
@@ -358,7 +374,7 @@ class AddListings extends React.Component
             listings: [...prevState.listings, tempListings]
         }))
         this.setState(prevState => ({
-            showListings: [...prevState.showListings, tempListings]
+            showListings: [...prevState.showListings, tempShowListings]
         }))
         this.setState(prevState => ({
             listAddresses: [...prevState.listAddresses, tempAddresses]
@@ -388,11 +404,6 @@ class AddListings extends React.Component
 
     writeUserData = () =>
     {
-        if(!(document.getElementById("rentBox").value.includes(",")))
-        {
-            console.log("tis okay")
-        }
-
         if (!(document.getElementById("addressBox").value === "") && !(document.getElementById("nameBox").value === "") &&
             !(document.getElementById("rentBox").value === "") && !(isNaN(parseFloat(document.getElementById("rentBox").value)))
             && !(document.getElementById("rentBox").value.includes(",")) && !(document.getElementById("bathroomBox").value === "")
@@ -422,7 +433,8 @@ class AddListings extends React.Component
                             details: document.getElementById("detailBox").value,
                             numberRooms: document.getElementById("roomBox").value,
                             numberBathrooms: document.getElementById("bathroomBox").value,
-                            listingType: this.state.typeText
+                            listingType: this.state.typeText,
+                            reservedBy: "None"
                         });
 
                         alert("Success! Please refresh page to see changes!")
@@ -506,7 +518,8 @@ class AddListings extends React.Component
                              </section>
                          </div>
                      </div>
-                     <div style={{display: "flex", justifyContent: "space-evenly"}}>
+                     {this.state.matches && (
+                         <div style={{display: "flex", justifyContent: "space-evenly"}}>
                          <Stack {...columnProps}>
                              <TextField label="Name of Listing" autoAdjustHeight required id={"descriptionBox"} onGetErrorMessage={value => {
                                  if (value === "") {
@@ -580,27 +593,119 @@ class AddListings extends React.Component
                                  styles={dropdownStyles}
                              />
                          </Stack>
-                     </div>
-                     <br/>
-                     <div style={{display: "flex"}}>
-                     <div style={{marginLeft: '40%'}}>
-                         <PrimaryButton onClick={this.handleOpen.bind(this)}>
-                             Add Image
-                         </PrimaryButton>
-                         <DropzoneDialog
-                             open={this.state.open}
-                             onSave={this.handleSave.bind(this)}
-                             acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
-                             showPreviews={true}
-                             maxFileSize={5000000}
-                             onClose={this.handleClose.bind(this)}
-                         />
-                     </div>
+                     </div>)}
 
+                     {!this.state.matches && (
+                         <>
+                         <Stack {...columnPropsPhone}>
+                             <TextField label="Name of Listing" autoAdjustHeight required id={"descriptionBox"} onGetErrorMessage={value => {
+                                 if (value === "") {
+                                     return 'This field is required';
+                                 }
+                             }}/>
+                             <TextField label="Name " required id={"nameBox"} onGetErrorMessage={value => {
+                                 if (value==="") {
+                                     return 'This field is required';
+                                 }
+                             }} />
+                             <TextField label="Listing Address" required id={"addressBox"} onGetErrorMessage={value => {
+                                 if (value==="") {
+                                     return 'This field is required';
+                                 }
+                             }}/>
+                             <TextField label="Number Of Rooms" required id={"roomBox"} onGetErrorMessage={value => {
+                                 if (value==="") {
+                                     return 'This field is required';
+                                 }
+                                 else if(isNaN(parseFloat(value)))
+                                 {
+                                     return "Please enter as a number"
+                                 }
+                                 else if (value.includes(","))
+                                 {
+                                     return "Enter the number without any commas"
+                                 }
+                             }}/>
 
+                             <TextField label="Rent" required id={"rentBox"} onGetErrorMessage={value => {
+                                 if (value==="") {
+                                     return 'This field is required';
+                                 }
+                                 else if(isNaN(parseFloat(value)))
+                                 {
+                                     return "Please enter as a number"
+                                 }
+                                 else if (value.includes(","))
+                                 {
+                                     return "Enter the number without any commas"
+                                 }
+                             }}/>
+                             <TextField label="Short Paragraph for Details" multiline autoAdjustHeight required id={"detailBox"} onGetErrorMessage={value => {
+                                 if (value === "") {
+                                     return 'This field is required';
+                                 }
+                             }}/>
+                             <TextField label="Number Of Bathrooms" required id={"bathroomBox"} onGetErrorMessage={value => {
+                                 if (value==="") {
+                                     return 'This field is required';
+                                 }
+                                 else if(isNaN(parseFloat(value)))
+                                 {
+                                     return "Please enter as a number"
+                                 }
+                                 else if (value.includes(","))
+                                 {
+                                     return "Enter the number without any commas"
+                                 }
+                             }}/>
+
+                             <Dropdown
+                                 placeholder="Select Type"
+                                 label="Type of Listing"
+                                 selectedKey={this.state.typeKey}
+                                 // eslint-disable-next-line react/jsx-no-bind
+                                 onChange={this.onChangeSelect}
+                                 options={typeProps}
+                                 styles={dropdownStylesPhone}
+                             />
+                         </Stack>
+                     </>)}
                      <br/>
-                     <PrimaryButton text="Add Listing" onClick={this.writeUserData} style={{marginLeft: "5%", backgroundColor: 'green'}} allowDisabledFocus/>
-                     </div>
+                     {this.state.matches && (
+                         <div style={{display: 'flex'}}>
+                             <div style={{marginLeft: '40%'}}>
+                                 <PrimaryButton onClick={this.handleOpen.bind(this)}>
+                                     Add Image
+                                 </PrimaryButton>
+                                 <DropzoneDialog
+                                     open={this.state.open}
+                                     onSave={this.handleSave.bind(this)}
+                                     acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
+                                     showPreviews={true}
+                                     maxFileSize={5000000}
+                                     onClose={this.handleClose.bind(this)}
+                                 />
+                             </div>
+                             <br/>
+                             <PrimaryButton text="Add Listing" onClick={this.writeUserData} style={{marginLeft: "5%", backgroundColor: 'green'}} allowDisabledFocus/>
+                         </div>)}
+
+                     {!this.state.matches && (
+                         <div style={{display: 'flex', marginLeft: "25%"}}>
+                             <PrimaryButton onClick={this.handleOpen.bind(this)}>
+                                 Add Image
+                             </PrimaryButton>
+                             <DropzoneDialog
+                                 open={this.state.open}
+                                 onSave={this.handleSave.bind(this)}
+                                 acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
+                                 showPreviews={true}
+                                 maxFileSize={5000000}
+                                 onClose={this.handleClose.bind(this)}
+                             />
+                             <br/>
+                             <PrimaryButton text="Add Listing" onClick={this.writeUserData} style={{ marginLeft: "5%", backgroundColor: 'green'}} allowDisabledFocus/>
+                         </div>)}
                      <div className="separator"/>
                      <Profile userNow={this.props.userNow} listings={this.state.listings}/>
                  </>
@@ -630,7 +735,8 @@ class AddListings extends React.Component
                             {/*</div>*/}
                         </div>
                     </div>
-                    <div style={{display: "flex", justifyContent: "space-evenly"}}>
+                    {this.state.matches && (
+                        <div style={{display: "flex", justifyContent: "space-evenly"}}>
 
                         <div>
                             <Dropdown
@@ -648,24 +754,59 @@ class AddListings extends React.Component
                         </div>
 
                         <div>
-                        <Dropdown
-                            placeholder="Sort By"
-                            label="Sort Listings"
-                            selectedKey={this.state.sortKey}
-                            // eslint-disable-next-line react/jsx-no-bind
-                            onChange={this.onChangeSort}
-                            options={menuProps}
-                            styles={dropdownStyles}
-                        />
+                            <Dropdown
+                                placeholder="Sort By"
+                                label="Sort Listings"
+                                selectedKey={this.state.sortKey}
+                                // eslint-disable-next-line react/jsx-no-bind
+                                onChange={this.onChangeSort}
+                                options={menuProps}
+                                styles={dropdownStyles}
+                            />
                             <br/>
                             <PrimaryButton text="Set Sort" onClick={this.sort}  allowDisabledFocus style={{marginLeft: "7vw"}}/>
                         </div>
 
-                    </div>
+                    </div>)}
+
+                    {!this.state.matches && (
+                        <div style={{display: "flex", justifyContent: "space-evenly"}}>
+
+                        <div>
+                            <Dropdown
+                                placeholder="Filter by"
+                                label="Filter Listings"
+                                selectedKeys={this.state.selectedKeys}
+                                // eslint-disable-next-line react/jsx-no-bind
+                                onChange={this.onChange}
+                                multiSelect
+                                options={filterProps}
+                                styles={dropdownStylesPhone2}
+                            />
+                            <br/>
+                            <PrimaryButton text="Set Filter" onClick={this.filter}  allowDisabledFocus style={{marginLeft: "7vw"}}/>
+                        </div>
+
+                        <div>
+                            <Dropdown
+                                placeholder="Sort By"
+                                label="Sort Listings"
+                                selectedKey={this.state.sortKey}
+                                // eslint-disable-next-line react/jsx-no-bind
+                                onChange={this.onChangeSort}
+                                options={menuProps}
+                                styles={dropdownStylesPhone2}
+                            />
+                            <br/>
+                            <PrimaryButton text="Set Sort" onClick={this.sort}  allowDisabledFocus style={{marginLeft: "7vw"}}/>
+                        </div>
+
+                    </div>)}
+
                     <ul>
                         {this.state.showListings[0].map((data) => (
                             <li key={data.address}>
-                                <SingleList description={data.description} name={data.name} address={data.address} email={data.email} rent={data.rent} image={data.photo} details={data.details} rooms={data.numberRooms} bathrooms={data.numberBathrooms} type={data.listingType}/>
+                                <SingleList description={data.description} name={data.name} address={data.address} email={data.email} rent={data.rent} image={data.photo} details={data.details} rooms={data.numberRooms} bathrooms={data.numberBathrooms} type={data.listingType} userNow={this.props.userNow} reserved={data.reservedBy}/>
                             </li>
                             ))}
                     </ul>
@@ -679,100 +820,195 @@ class AddListings extends React.Component
                             </section>
                         </div>
                     </div>
-                    <div style={{display: "flex", justifyContent: "space-evenly"}}>
-                    <Stack {...columnProps}>
-                        <TextField label="Name of Listing" autoAdjustHeight required id={"descriptionBox"} onGetErrorMessage={value => {
-                            if (value === "") {
-                                return 'This field is required';
-                            }
-                        }}/>
-                        <TextField label="Name " required id={"nameBox"} onGetErrorMessage={value => {
-                            if (value==="") {
-                                return 'This field is required';
-                            }
-                        }} />
-                        <TextField label="Listing Address" required id={"addressBox"} onGetErrorMessage={value => {
-                            if (value==="") {
-                                return 'This field is required';
-                            }
-                        }}/>
-                        <TextField label="Number Of Rooms" required id={"roomBox"} onGetErrorMessage={value => {
-                            if (value==="") {
-                                return 'This field is required';
-                            }
-                            else if(isNaN(parseFloat(value)))
-                            {
-                                return "Please enter as a number"
-                            }
-                            else if (value.includes(","))
-                            {
-                                return "Enter the number without any commas"
-                            }
-                        }}/>
-                    </Stack>
-                    <Stack {...columnProps2}>
-                        <TextField label="Rent" required id={"rentBox"} onGetErrorMessage={value => {
-                            if (value==="") {
-                                return 'This field is required';
-                            }
-                            else if(isNaN(parseFloat(value)))
-                            {
-                                return "Please enter as a number"
-                            }
-                            else if (value.includes(","))
-                            {
-                                return "Enter the number without any commas"
-                            }
-                        }}/>
-                        <TextField label="Short Paragraph for Details" multiline autoAdjustHeight required id={"detailBox"} onGetErrorMessage={value => {
-                            if (value === "") {
-                                return 'This field is required';
-                            }
-                        }}/>
-                        <TextField label="Number Of Bathrooms" required id={"bathroomBox"} onGetErrorMessage={value => {
-                            if (value==="") {
-                                return 'This field is required';
-                            }
-                            else if(isNaN(parseFloat(value)))
-                            {
-                                return "Please enter as a number"
-                            }
-                            else if (value.includes(","))
-                            {
-                                return "Enter the number without any commas"
-                            }
-                        }}/>
+                    {this.state.matches && (
+                        <div style={{display: "flex", justifyContent: "space-evenly"}}>
+                            <Stack {...columnProps}>
+                                <TextField label="Name of Listing" autoAdjustHeight required id={"descriptionBox"} onGetErrorMessage={value => {
+                                    if (value === "") {
+                                        return 'This field is required';
+                                    }
+                                }}/>
+                                <TextField label="Name " required id={"nameBox"} onGetErrorMessage={value => {
+                                    if (value==="") {
+                                        return 'This field is required';
+                                    }
+                                }} />
+                                <TextField label="Listing Address" required id={"addressBox"} onGetErrorMessage={value => {
+                                    if (value==="") {
+                                        return 'This field is required';
+                                    }
+                                }}/>
+                                <TextField label="Number Of Rooms" required id={"roomBox"} onGetErrorMessage={value => {
+                                    if (value==="") {
+                                        return 'This field is required';
+                                    }
+                                    else if(isNaN(parseFloat(value)))
+                                    {
+                                        return "Please enter as a number"
+                                    }
+                                    else if (value.includes(","))
+                                    {
+                                        return "Enter the number without any commas"
+                                    }
+                                }}/>
+                            </Stack>
+                            <Stack {...columnProps2}>
+                                <TextField label="Rent" required id={"rentBox"} onGetErrorMessage={value => {
+                                    if (value==="") {
+                                        return 'This field is required';
+                                    }
+                                    else if(isNaN(parseFloat(value)))
+                                    {
+                                        return "Please enter as a number"
+                                    }
+                                    else if (value.includes(","))
+                                    {
+                                        return "Enter the number without any commas"
+                                    }
+                                }}/>
+                                <TextField label="Short Paragraph for Details" multiline autoAdjustHeight required id={"detailBox"} onGetErrorMessage={value => {
+                                    if (value === "") {
+                                        return 'This field is required';
+                                    }
+                                }}/>
+                                <TextField label="Number Of Bathrooms" required id={"bathroomBox"} onGetErrorMessage={value => {
+                                    if (value==="") {
+                                        return 'This field is required';
+                                    }
+                                    else if(isNaN(parseFloat(value)))
+                                    {
+                                        return "Please enter as a number"
+                                    }
+                                    else if (value.includes(","))
+                                    {
+                                        return "Enter the number without any commas"
+                                    }
+                                }}/>
 
-                        <Dropdown
-                            placeholder="Select Type"
-                            label="Type of Listing"
-                            selectedKey={this.state.typeKey}
-                            // eslint-disable-next-line react/jsx-no-bind
-                            onChange={this.onChangeSelect}
-                            options={typeProps}
-                            styles={dropdownStyles}
-                        />
+                                <Dropdown
+                                    placeholder="Select Type"
+                                    label="Type of Listing"
+                                    selectedKey={this.state.typeKey}
+                                    // eslint-disable-next-line react/jsx-no-bind
+                                    onChange={this.onChangeSelect}
+                                    options={typeProps}
+                                    styles={dropdownStyles}
+                                />
+                            </Stack>
+                        </div>)}
 
-                    </Stack>
-                    </div>
+                    {!this.state.matches && (
+                        <>
+                            <Stack {...columnPropsPhone}>
+                                <TextField label="Name of Listing" autoAdjustHeight required id={"descriptionBox"} onGetErrorMessage={value => {
+                                    if (value === "") {
+                                        return 'This field is required';
+                                    }
+                                }}/>
+                                <TextField label="Name " required id={"nameBox"} onGetErrorMessage={value => {
+                                    if (value==="") {
+                                        return 'This field is required';
+                                    }
+                                }} />
+                                <TextField label="Listing Address" required id={"addressBox"} onGetErrorMessage={value => {
+                                    if (value==="") {
+                                        return 'This field is required';
+                                    }
+                                }}/>
+                                <TextField label="Number Of Rooms" required id={"roomBox"} onGetErrorMessage={value => {
+                                    if (value==="") {
+                                        return 'This field is required';
+                                    }
+                                    else if(isNaN(parseFloat(value)))
+                                    {
+                                        return "Please enter as a number"
+                                    }
+                                    else if (value.includes(","))
+                                    {
+                                        return "Enter the number without any commas"
+                                    }
+                                }}/>
+
+                                <TextField label="Rent" required id={"rentBox"} onGetErrorMessage={value => {
+                                    if (value==="") {
+                                        return 'This field is required';
+                                    }
+                                    else if(isNaN(parseFloat(value)))
+                                    {
+                                        return "Please enter as a number"
+                                    }
+                                    else if (value.includes(","))
+                                    {
+                                        return "Enter the number without any commas"
+                                    }
+                                }}/>
+                                <TextField label="Short Paragraph for Details" multiline autoAdjustHeight required id={"detailBox"} onGetErrorMessage={value => {
+                                    if (value === "") {
+                                        return 'This field is required';
+                                    }
+                                }}/>
+                                <TextField label="Number Of Bathrooms" required id={"bathroomBox"} onGetErrorMessage={value => {
+                                    if (value==="") {
+                                        return 'This field is required';
+                                    }
+                                    else if(isNaN(parseFloat(value)))
+                                    {
+                                        return "Please enter as a number"
+                                    }
+                                    else if (value.includes(","))
+                                    {
+                                        return "Enter the number without any commas"
+                                    }
+                                }}/>
+
+                                <Dropdown
+                                    placeholder="Select Type"
+                                    label="Type of Listing"
+                                    selectedKey={this.state.typeKey}
+                                    // eslint-disable-next-line react/jsx-no-bind
+                                    onChange={this.onChangeSelect}
+                                    options={typeProps}
+                                    styles={dropdownStylesPhone}
+                                />
+                            </Stack>
+                        </>)}
                     <br/>
-                    <div style={{display: 'flex'}}>
-                    <div style={{marginLeft: '40%'}}>
-                        <PrimaryButton onClick={this.handleOpen.bind(this)}>
-                            Add Image
-                        </PrimaryButton>
-                        <DropzoneDialog
-                            open={this.state.open}
-                            onSave={this.handleSave.bind(this)}
-                            acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
-                            showPreviews={true}
-                            maxFileSize={5000000}
-                            onClose={this.handleClose.bind(this)}
-                        />
-                    </div>
-                    <br/>
-                    <PrimaryButton text="Add Listing" onClick={this.writeUserData} style={{marginLeft: "5%", backgroundColor: 'green'}} allowDisabledFocus/>
-                    </div>
+                    {this.state.matches && (
+                        <div style={{display: 'flex'}}>
+                            <div style={{marginLeft: '40%'}}>
+                                <PrimaryButton onClick={this.handleOpen.bind(this)}>
+                                    Add Image
+                                </PrimaryButton>
+                                <DropzoneDialog
+                                    open={this.state.open}
+                                    onSave={this.handleSave.bind(this)}
+                                    acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
+                                    showPreviews={true}
+                                    maxFileSize={5000000}
+                                    onClose={this.handleClose.bind(this)}
+                                />
+                            </div>
+                            <br/>
+                            <PrimaryButton text="Add Listing" onClick={this.writeUserData} style={{marginLeft: "5%", backgroundColor: 'green'}} allowDisabledFocus/>
+                        </div>)}
+
+                    {!this.state.matches && (
+                        <div style={{display: 'flex', marginLeft: "25%"}}>
+                            <PrimaryButton onClick={this.handleOpen.bind(this)}>
+                                Add Image
+                            </PrimaryButton>
+                            <DropzoneDialog
+                                open={this.state.open}
+                                onSave={this.handleSave.bind(this)}
+                                acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
+                                showPreviews={true}
+                                maxFileSize={5000000}
+                                onClose={this.handleClose.bind(this)}
+                            />
+                            <br/>
+                            <PrimaryButton text="Add Listing" onClick={this.writeUserData} style={{ marginLeft: "5%", backgroundColor: 'green'}} allowDisabledFocus/>
+                        </div>)}
+
                     <div className="separator"/>
                     <Profile userNow={this.props.userNow} listings={this.state.listings}/>
                 </>
