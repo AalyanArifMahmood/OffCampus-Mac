@@ -43,13 +43,12 @@ class Navbar extends React.Component {
                 {!this.state.matches && (
                     <>
                     <Scrollspy
-                        items={['home', 'listings', 'addListing', 'profile', 'aboutus']}
+                        items={['home', 'listings', 'addListing', 'profile']}
                         currentClassName="active">
-                        <li style={{marginLeft: "-20%", marginRight: "2%"}}><a href="#home">Home</a></li>
+                        <li style={{marginLeft: "-15%", marginRight: "2%"}}><a href="#home">Home</a></li>
                         <li style={{marginRight: "3%"}}><a href="#listings">Listings</a></li>
                         <li style={{marginRight: "3%"}}><a href="#addListing">Add Listing</a></li>
                         <li style={{marginRight: "3%"}}><a href="#profile">Profile</a></li>
-                        <li style={{marginRight: "3%"}}><a href="#aboutus">About</a></li>
                     </Scrollspy>
                 </>)}
             </nav>

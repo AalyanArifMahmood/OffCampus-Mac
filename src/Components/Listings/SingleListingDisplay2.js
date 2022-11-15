@@ -457,23 +457,23 @@ class SingleList2 extends React.Component
                 </>)}
                 {!this.state.matches && (
                     <>
-                        <Box bgcolor="white" p={1} border={2} marginRight={10} marginLeft={10}>
+                        <Box bgcolor="white" p={1} border={2} marginRight={2} marginLeft={2}>
                             <b style={{textAlign: "center", fontSize: '110%', marginLeft: "1%"}}>{this.props.description}</b>
 
                             <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
-                                <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}> {this.props.type}</b>
+                                <b style={{textAlign: "left", fontSize: '90%', marginLeft: "1%", color: "grey"}}> {this.props.type}</b>
                             </div>
 
                             <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
-                                <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}>{this.props.address}</b>
+                                <b style={{textAlign: "left", fontSize: '90%', marginLeft: "1%", color: "grey"}}>{this.props.address}</b>
                             </div>
 
                             <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
-                                <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}>{this.props.name}</b>
+                                <b style={{textAlign: "left", fontSize: '90%', marginLeft: "1%", color: "grey"}}>{this.props.name}</b>
                             </div>
 
                             <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
-                                <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}>{this.props.email}</b>
+                                <b style={{textAlign: "left", fontSize: '90%', marginLeft: "1%", color: "grey"}}>{this.props.email}</b>
                             </div>
                             <br/>
                             <div style={{justifyContent: "space-between", display: "flex"}}>
@@ -488,21 +488,21 @@ class SingleList2 extends React.Component
 
 
                                 <Box bgcolor="white" p={1} border={2} marginRight={0} marginBottom = {10} marginTop = {5} color = "#3792cd" style={{textAlign: "center", maxHeight: "7vh", borderRadius: "30%"}}>
-                                    <b style={{color:"black", fontSize: "100%"}}>Rent</b>
+                                    <b style={{color:"black", fontSize: "90%"}}>Rent</b>
                                     <br/>
-                                    <b style={{textAlign: "left", fontSize: '100%', marginLeft: "5%", color: "black"}}>{"$"}{this.props.rent}</b>
+                                    <b style={{textAlign: "left", fontSize: '90%', marginLeft: "5%", color: "black"}}>{"$"}{this.props.rent}</b>
                                 </Box>
 
                                 <Box bgcolor="white" p={1} border={2} marginRight={0} marginLeft={2} marginBottom = {10} marginTop = {5} color = "#3792cd" style={{textAlign: "center", maxHeight: "7vh", borderRadius: "30%"}}>
-                                    <b style={{color:"black", fontSize: "100%"}}>Rooms</b>
+                                    <b style={{color:"black", fontSize: "90%"}}>Rooms</b>
                                     <br/>
                                     <b style={{fontSize: '100%', marginLeft: "5%", color: "black"}}>{this.props.rooms}</b>
                                 </Box>
 
                                 <Box bgcolor="white" p={1} border={2} marginRight={0} marginLeft={2} marginBottom = {10} marginTop = {5} color = "#3792cd" style={{textAlign: "center", maxHeight: "7vh", borderRadius: "30%"}}>
-                                    <b style={{color:"black", fontSize: "100%"}}>Bathrooms</b>
+                                    <b style={{color:"black", fontSize: "90%"}}>Bathrooms</b>
                                     <br/>
-                                    <b style={{textAlign: "left", fontSize: '100%', marginLeft: "5%", color: "black"}}>{this.props.bathrooms}</b>
+                                    <b style={{textAlign: "left", fontSize: '90%', marginLeft: "5%", color: "black"}}>{this.props.bathrooms}</b>
                                 </Box>
 
                             {/* <Stack {...columnProps}>

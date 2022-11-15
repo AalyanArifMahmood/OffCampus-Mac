@@ -155,7 +155,7 @@ const columnProps: Partial<IStackProps> = {
 
 const columnPropsPhone: Partial<IStackProps> = {
     tokens: { childrenGap: 15 },
-    styles: { root: { width: 240, marginLeft: "25%"} },
+    styles: { root: { width: 240, marginLeft: "20%"} },
 };
 
 const columnProps2: Partial<IStackProps> = {
@@ -374,7 +374,7 @@ class AddListings extends React.Component
             listings: [...prevState.listings, tempListings]
         }))
         this.setState(prevState => ({
-            showListings: [...prevState.showListings, tempShowListings]
+            showListings: [...prevState.showListings, tempListings]
         }))
         this.setState(prevState => ({
             listAddresses: [...prevState.listAddresses, tempAddresses]
@@ -691,7 +691,7 @@ class AddListings extends React.Component
                          </div>)}
 
                      {!this.state.matches && (
-                         <div style={{display: 'flex', marginLeft: "25%"}}>
+                         <div style={{display: 'flex', marginLeft: "17%"}}>
                              <PrimaryButton onClick={this.handleOpen.bind(this)}>
                                  Add Image
                              </PrimaryButton>
@@ -993,7 +993,7 @@ class AddListings extends React.Component
                         </div>)}
 
                     {!this.state.matches && (
-                        <div style={{display: 'flex', marginLeft: "25%"}}>
+                        <div style={{display: 'flex', marginLeft: "17%"}}>
                             <PrimaryButton onClick={this.handleOpen.bind(this)}>
                                 Add Image
                             </PrimaryButton>
