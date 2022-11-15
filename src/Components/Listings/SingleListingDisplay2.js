@@ -135,9 +135,15 @@ class SingleList2 extends React.Component
                 files: [],
                 open: false,
                 typeKey: '',
-                typeText: ''
+                typeText: '',
+                matches: window.matchMedia("(min-width: 680px)").matches
             }
 
+    }
+
+    componentDidMount() {
+        const handler = e => this.setState({matches: e.matches});
+        window.matchMedia("(min-width: 680px)").addEventListener('change', handler);
     }
 
     onChangeSelect = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption) =>
@@ -246,46 +252,48 @@ class SingleList2 extends React.Component
     {
         return (
             <>
-                <Box bgcolor="white" p={1} border={2} marginRight={12} marginLeft={10}>
-                    <b style={{textAlign: "center", fontSize: '150%', marginLeft: "1%"}}>{this.props.description}</b>
+                {this.state.matches && (
+                    <>
+                    <Box bgcolor="white" p={1} border={2} marginRight={12} marginLeft={10}>
+                        <b style={{textAlign: "center", fontSize: '150%', marginLeft: "1%"}}>{this.props.description}</b>
 
-                    <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
-                        <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}> {this.props.type}</b>
-                    </div>
+                        <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
+                            <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}> {this.props.type}</b>
+                        </div>
 
-                    <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
-                        <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}>{this.props.address}</b>
-                    </div>
+                        <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
+                            <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}>{this.props.address}</b>
+                        </div>
 
-                    <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
-                        <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}>{this.props.name}</b>
-                    </div>
+                        <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
+                            <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}>{this.props.name}</b>
+                        </div>
 
-                    <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
-                        <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}>{this.props.email}</b>
-                    </div>
+                        <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
+                            <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}>{this.props.email}</b>
+                        </div>
 
-                    <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
+                        <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
 
-                        <Box bgcolor="white" p={1} border={2} marginRight={0} marginLeft={10} marginBottom = {10} marginTop = {5} color = "#3792cd" style={{textAlign: "center", maxHeight: "7vh", borderRadius: "30%"}}>
-                            <b style={{color:"black", fontSize: "120%"}}>Rent</b>
-                            <br/>
-                            <b style={{textAlign: "left", fontSize: '120%', marginLeft: "5%", color: "black"}}>{"$"}{this.props.rent}</b>
-                        </Box>
+                            <Box bgcolor="white" p={1} border={2} marginRight={0} marginLeft={10} marginBottom = {10} marginTop = {5} color = "#3792cd" style={{textAlign: "center", maxHeight: "7vh", borderRadius: "30%"}}>
+                                <b style={{color:"black", fontSize: "120%"}}>Rent</b>
+                                <br/>
+                                <b style={{textAlign: "left", fontSize: '120%', marginLeft: "5%", color: "black"}}>{"$"}{this.props.rent}</b>
+                            </Box>
 
-                        <Box bgcolor="white" p={1} border={2} marginRight={0} marginLeft={5} marginBottom = {10} marginTop = {5} color = "#3792cd" style={{textAlign: "center", maxHeight: "7vh", borderRadius: "30%"}}>
-                            <b style={{color:"black", fontSize: "120%"}}>Rooms</b>
-                            <br/>
-                            <b style={{fontSize: '120%', marginLeft: "5%", color: "black"}}>{this.props.rooms}</b>
-                        </Box>
+                            <Box bgcolor="white" p={1} border={2} marginRight={0} marginLeft={5} marginBottom = {10} marginTop = {5} color = "#3792cd" style={{textAlign: "center", maxHeight: "7vh", borderRadius: "30%"}}>
+                                <b style={{color:"black", fontSize: "120%"}}>Rooms</b>
+                                <br/>
+                                <b style={{fontSize: '120%', marginLeft: "5%", color: "black"}}>{this.props.rooms}</b>
+                            </Box>
 
-                        <Box bgcolor="white" p={1} border={2} marginRight={0} marginLeft={5} marginBottom = {10} marginTop = {5} color = "#3792cd" style={{textAlign: "center", maxHeight: "7vh", borderRadius: "30%"}}>
-                            <b style={{color:"black", fontSize: "120%"}}>Bathrooms</b>
-                            <br/>
-                            <b style={{textAlign: "left", fontSize: '120%', marginLeft: "5%", color: "black"}}>{this.props.bathrooms}</b>
-                        </Box>
+                            <Box bgcolor="white" p={1} border={2} marginRight={0} marginLeft={5} marginBottom = {10} marginTop = {5} color = "#3792cd" style={{textAlign: "center", maxHeight: "7vh", borderRadius: "30%"}}>
+                                <b style={{color:"black", fontSize: "120%"}}>Bathrooms</b>
+                                <br/>
+                                <b style={{textAlign: "left", fontSize: '120%', marginLeft: "5%", color: "black"}}>{this.props.bathrooms}</b>
+                            </Box>
 
-                        {/* <Stack {...columnProps}>
+                            {/* <Stack {...columnProps}>
                             <p><b>Address:</b> {this.props.address} </p>
                             <p><b>Contact Name:</b> {this.props.name}</p>
                             <p><b>Contact Information:</b> {this.props.email}  </p>
@@ -293,114 +301,114 @@ class SingleList2 extends React.Component
                             <p><b>Number Of Rooms:</b> {this.props.rooms}  </p>
                             <p><b>Number Of Bathrooms:</b> {this.props.bathrooms}  </p>
                         </Stack> */}
-                        <img src={this.props.image} alt="Nothing" style={{width: '24%', height: '19%', boxShadow: '1px 12px 9px #6f6f6f', borderRadius: '6%'}} />
-                    </div>
-                    <PrimaryButton text="More Info" onClick={this.setToTrue} style={{width: '16vh', marginLeft: "45%"}} allowDisabledFocus/>
-                    <Modal
-                        isOpen={this.state.extend}
-                        onDismiss={this.setToTrue}
-                        containerClassName={contentStyles.container}
-                        isBlocking={false}
-                        dragOptions={true}>
-
-                        <div className={contentStyles.header}>
-                            <span>{this.props.description}</span>
-                            <IconButton
-                                styles={iconButtonStyles}
-                                iconProps={cancelIcon}
-                                ariaLabel="Close popup modal"
-                                onClick={this.setToTrue}
-                            />
+                            <img src={this.props.image} alt="Nothing" style={{width: '24%', height: '19%', boxShadow: '1px 12px 9px #6f6f6f', borderRadius: '6%'}} />
                         </div>
-                        <div className={contentStyles.body}>
-                            <Stack {...columnProps4}>
-                                <p><b>Address:</b> {this.props.address} </p>
-                                <p><b>Type of Listing: </b> {this.props.type}</p>
-                                <p><b>Contact Name:</b> {this.props.name}</p>
-                                <p><b>Contact Information:</b> {this.props.email}  </p>
-                                <p><b>Rent:</b> {this.props.rent}  </p>
-                                <p><b>Number Of Rooms:</b> {this.props.rooms}  </p>
-                                <p><b>Number Of Bathrooms:</b> {this.props.bathrooms}  </p>
-                                <p><b>Reserved by: </b> {this.props.reservedBy === "" ? "None" : this.props.reserved}</p>
-                            </Stack>
-                            <img src={this.props.image} alt="Nothing" style={{width: '30%', height: '25%', boxShadow: '1px 12px 9px #6f6f6f', borderRadius: '6%'}} />
-                        </div>
-                        <div className={contentStyles.body}>
-                            <Stack>
-                                <b>Description: </b>
-                                <p style={{textAlign: "justify"}}>{this.props.details}</p>
-                            </Stack>
-                        </div>
-                        <Stack horizontal {...columnProps}>
-                            <PrimaryButton text="Edit" onClick={this.openEditModal} style={{width: '16vh', marginLeft: "45%"}} disabled={this.props.userNow[0].email.toLowerCase() !== this.props.email.toLowerCase()}  allowDisabledFocus/>
-                            <PrimaryButton text="Delete" onClick={this.openDeleteModal} style={{width: '16vh'}} disabled={this.props.userNow[0].email.toLowerCase() !== this.props.email.toLowerCase()} allowDisabledFocus/>
-                        </Stack>
+                        <PrimaryButton text="More Info" onClick={this.setToTrue} style={{width: '16vh', marginLeft: "45%"}} allowDisabledFocus/>
                         <Modal
-                        isOpen={this.state.editModalOpen}
-                        onDismiss={this.openEditModal}
-                        containerClassName={contentStyles.container}
-                        isBlocking={false}
-                        dragOptions={true}>
+                            isOpen={this.state.extend}
+                            onDismiss={this.setToTrue}
+                            containerClassName={contentStyles.container}
+                            isBlocking={false}
+                            dragOptions={true}>
+
                             <div className={contentStyles.header}>
-                                <span>Edit This Listing</span>
+                                <span>{this.props.description}</span>
                                 <IconButton
                                     styles={iconButtonStyles}
                                     iconProps={cancelIcon}
                                     ariaLabel="Close popup modal"
-                                    onClick={this.openEditModal}
+                                    onClick={this.setToTrue}
                                 />
                             </div>
-                            {/*<h1 style={{textAlign: "center"}}>Edit This Listing</h1>*/}
-                            <div style={{display: "flex", justifyContent: "space-evenly", marginLeft: "4%", marginRight: "4%", marginTop: "2%"}}>
-                                <Stack {...columnProps}>
-                                    <TextField placeholder={this.props.description} label="Name of Listing" autoAdjustHeight id={"descriptionsBox"}/>
-                                    <TextField placeholder={this.props.name} label="Name " id={"namesBox"}/>
-                                    <TextField placeholder={this.props.address} label="Listing Address"  id={"addresssBox"}/>
-                                    <TextField placeholder={this.props.rooms} label="Number Of Rooms" id={"roomsBox"} onGetErrorMessage={value => {
-                                        if(value !== "" && isNaN(parseFloat(value)))
-                                        {
-                                            return "Please enter as a number"
-                                        }
-                                        else if (value.includes(","))
-                                        {
-                                            return "Enter the number without any commas"
-                                        }
-                                    }}/>
+                            <div className={contentStyles.body}>
+                                <Stack {...columnProps4}>
+                                    <p><b>Address:</b> {this.props.address} </p>
+                                    <p><b>Type of Listing: </b> {this.props.type}</p>
+                                    <p><b>Contact Name:</b> {this.props.name}</p>
+                                    <p><b>Contact Information:</b> {this.props.email}  </p>
+                                    <p><b>Rent:</b> {this.props.rent}  </p>
+                                    <p><b>Number Of Rooms:</b> {this.props.rooms}  </p>
+                                    <p><b>Number Of Bathrooms:</b> {this.props.bathrooms}  </p>
+                                    <p><b>Reserved by: </b> {this.props.reservedBy === "" ? "None" : this.props.reserved}</p>
                                 </Stack>
-                                <Stack {...columnProps}>
-                                    <TextField placeholder={this.props.rent} label="Rent" id={"rentsBox"} onGetErrorMessage={value => {
-                                        if( value !== "" && isNaN(parseFloat(value)))
-                                        {
-                                            return "Please enter as a number"
-                                        }
-                                        else if (value.includes(","))
-                                        {
-                                            return "Enter the number without any commas"
-                                        }
-                                    }}/>
-                                    <TextField placeholder={this.props.details} label="Short Paragraph for Details" autoAdjustHeight id={"detailsBox"}/>
-                                    <TextField placeholder={this.props.bathrooms} label="Number Of Bathrooms" id={"bathroomsBox"} onGetErrorMessage={value => {
-                                        if(value !== "" && isNaN(parseFloat(value)))
-                                        {
-                                            return "Please enter as a number"
-                                        }
-                                        else if (value.includes(","))
-                                        {
-                                            return "Enter the number without any commas"
-                                        }
-                                    }}/>
-                                    <Dropdown
-                                        placeholder="Select Type"
-                                        label="Type of Listing"
-                                        selectedKey={this.state.typeKey}
-                                        // eslint-disable-next-line react/jsx-no-bind
-                                        onChange={this.onChangeSelect}
-                                        options={typeProps}
-                                        styles={dropdownStyles}
-                                    />
+                                <img src={this.props.image} alt="Nothing" style={{width: '30%', height: '25%', boxShadow: '1px 12px 9px #6f6f6f', borderRadius: '6%'}} />
+                            </div>
+                            <div className={contentStyles.body}>
+                                <Stack>
+                                    <b>Description: </b>
+                                    <p style={{textAlign: "justify"}}>{this.props.details}</p>
                                 </Stack>
                             </div>
-                            {/*<div>*/}
+                            <Stack horizontal {...columnProps}>
+                                <PrimaryButton text="Edit" onClick={this.openEditModal} style={{width: '16vh', marginLeft: "45%"}} disabled={this.props.userNow[0].email.toLowerCase() !== this.props.email.toLowerCase()}  allowDisabledFocus/>
+                                <PrimaryButton text="Delete" onClick={this.openDeleteModal} style={{width: '16vh'}} disabled={this.props.userNow[0].email.toLowerCase() !== this.props.email.toLowerCase()} allowDisabledFocus/>
+                            </Stack>
+                            <Modal
+                                isOpen={this.state.editModalOpen}
+                                onDismiss={this.openEditModal}
+                                containerClassName={contentStyles.container}
+                                isBlocking={false}
+                                dragOptions={true}>
+                                <div className={contentStyles.header}>
+                                    <span>Edit This Listing</span>
+                                    <IconButton
+                                        styles={iconButtonStyles}
+                                        iconProps={cancelIcon}
+                                        ariaLabel="Close popup modal"
+                                        onClick={this.openEditModal}
+                                    />
+                                </div>
+                                {/*<h1 style={{textAlign: "center"}}>Edit This Listing</h1>*/}
+                                <div style={{display: "flex", justifyContent: "space-evenly", marginLeft: "4%", marginRight: "4%", marginTop: "2%"}}>
+                                    <Stack {...columnProps}>
+                                        <TextField placeholder={this.props.description} label="Name of Listing" autoAdjustHeight id={"descriptionsBox"}/>
+                                        <TextField placeholder={this.props.name} label="Name " id={"namesBox"}/>
+                                        <TextField placeholder={this.props.address} label="Listing Address"  id={"addresssBox"}/>
+                                        <TextField placeholder={this.props.rooms} label="Number Of Rooms" id={"roomsBox"} onGetErrorMessage={value => {
+                                            if(value !== "" && isNaN(parseFloat(value)))
+                                            {
+                                                return "Please enter as a number"
+                                            }
+                                            else if (value.includes(","))
+                                            {
+                                                return "Enter the number without any commas"
+                                            }
+                                        }}/>
+                                    </Stack>
+                                    <Stack {...columnProps}>
+                                        <TextField placeholder={this.props.rent} label="Rent" id={"rentsBox"} onGetErrorMessage={value => {
+                                            if( value !== "" && isNaN(parseFloat(value)))
+                                            {
+                                                return "Please enter as a number"
+                                            }
+                                            else if (value.includes(","))
+                                            {
+                                                return "Enter the number without any commas"
+                                            }
+                                        }}/>
+                                        <TextField placeholder={this.props.details} label="Short Paragraph for Details" autoAdjustHeight id={"detailsBox"}/>
+                                        <TextField placeholder={this.props.bathrooms} label="Number Of Bathrooms" id={"bathroomsBox"} onGetErrorMessage={value => {
+                                            if(value !== "" && isNaN(parseFloat(value)))
+                                            {
+                                                return "Please enter as a number"
+                                            }
+                                            else if (value.includes(","))
+                                            {
+                                                return "Enter the number without any commas"
+                                            }
+                                        }}/>
+                                        <Dropdown
+                                            placeholder="Select Type"
+                                            label="Type of Listing"
+                                            selectedKey={this.state.typeKey}
+                                            // eslint-disable-next-line react/jsx-no-bind
+                                            onChange={this.onChangeSelect}
+                                            options={typeProps}
+                                            styles={dropdownStyles}
+                                        />
+                                    </Stack>
+                                </div>
+                                {/*<div>*/}
                                 {/*<PrimaryButton onClick={this.handleOpen.bind(this)}>*/}
                                 {/*    Add Image*/}
                                 {/*</PrimaryButton>*/}
@@ -412,20 +420,20 @@ class SingleList2 extends React.Component
                                 {/*    maxFileSize={5000000}*/}
                                 {/*    onClose={this.handleClose.bind(this)}*/}
                                 {/*/>*/}
-                            {/*</div>*/}
-                            <Stack horizontal {...columnProps2}>
-                                <DefaultButton text="Cancel" onClick={this.openEditModal}/>
-                                <PrimaryButton text="Confirm" onClick={this.editListing} style={{width: '16vh'}} allowDisabledFocus/>
-                            </Stack>
-                        </Modal>
+                                {/*</div>*/}
+                                <Stack horizontal {...columnProps2}>
+                                    <DefaultButton text="Cancel" onClick={this.openEditModal}/>
+                                    <PrimaryButton text="Confirm" onClick={this.editListing} style={{width: '16vh'}} allowDisabledFocus/>
+                                </Stack>
+                            </Modal>
 
 
-                        <Modal
-                            isOpen={this.state.deleteModalOpen}
-                            onDismiss={this.openDeleteModal}
-                            containerClassName={contentStyles.container}
-                            isBlocking={false}
-                            dragOptions={true}>
+                            <Modal
+                                isOpen={this.state.deleteModalOpen}
+                                onDismiss={this.openDeleteModal}
+                                containerClassName={contentStyles.container}
+                                isBlocking={false}
+                                dragOptions={true}>
 
                                 <div className={contentStyles.header}>
                                     <span>Delete This Listing</span>
@@ -436,16 +444,228 @@ class SingleList2 extends React.Component
                                         onClick={this.openDeleteModal}
                                     />
                                 </div>
-                            <div className={contentStyles.body}>
-                                <h3> Are you sure you want to delete this listing?</h3>
-                            </div>
-                            <Stack horizontal {...columnProps3}>
-                                <DefaultButton text="Cancel" onClick={this.openDeleteModal}/>
-                                <PrimaryButton text="Delete" onClick={this.deleteListing} style={{width: '16vh'}} allowDisabledFocus/>
-                            </Stack>
+                                <div className={contentStyles.body}>
+                                    <h3> Are you sure you want to delete this listing?</h3>
+                                </div>
+                                <Stack horizontal {...columnProps3}>
+                                    <DefaultButton text="Cancel" onClick={this.openDeleteModal}/>
+                                    <PrimaryButton text="Delete" onClick={this.deleteListing} style={{width: '16vh'}} allowDisabledFocus/>
+                                </Stack>
+                            </Modal>
                         </Modal>
-                    </Modal>
-                </Box>
+                    </Box>
+                </>)}
+                {!this.state.matches && (
+                    <>
+                        <Box bgcolor="white" p={1} border={2} marginRight={10} marginLeft={10}>
+                            <b style={{textAlign: "center", fontSize: '110%', marginLeft: "1%"}}>{this.props.description}</b>
+
+                            <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
+                                <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}> {this.props.type}</b>
+                            </div>
+
+                            <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
+                                <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}>{this.props.address}</b>
+                            </div>
+
+                            <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
+                                <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}>{this.props.name}</b>
+                            </div>
+
+                            <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
+                                <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}>{this.props.email}</b>
+                            </div>
+                            <br/>
+                            <div style={{justifyContent: "space-between", display: "flex"}}>
+                                <p>
+
+
+                                </p>
+                                <img src={this.props.image} alt="Nothing" style={{width: '50%', height: '40%', boxShadow: '1px 12px 9px #6f6f6f', borderRadius: '6%'}} />
+                            </div>
+
+                            <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
+
+
+                                <Box bgcolor="white" p={1} border={2} marginRight={0} marginBottom = {10} marginTop = {5} color = "#3792cd" style={{textAlign: "center", maxHeight: "7vh", borderRadius: "30%"}}>
+                                    <b style={{color:"black", fontSize: "100%"}}>Rent</b>
+                                    <br/>
+                                    <b style={{textAlign: "left", fontSize: '100%', marginLeft: "5%", color: "black"}}>{"$"}{this.props.rent}</b>
+                                </Box>
+
+                                <Box bgcolor="white" p={1} border={2} marginRight={0} marginLeft={2} marginBottom = {10} marginTop = {5} color = "#3792cd" style={{textAlign: "center", maxHeight: "7vh", borderRadius: "30%"}}>
+                                    <b style={{color:"black", fontSize: "100%"}}>Rooms</b>
+                                    <br/>
+                                    <b style={{fontSize: '100%', marginLeft: "5%", color: "black"}}>{this.props.rooms}</b>
+                                </Box>
+
+                                <Box bgcolor="white" p={1} border={2} marginRight={0} marginLeft={2} marginBottom = {10} marginTop = {5} color = "#3792cd" style={{textAlign: "center", maxHeight: "7vh", borderRadius: "30%"}}>
+                                    <b style={{color:"black", fontSize: "100%"}}>Bathrooms</b>
+                                    <br/>
+                                    <b style={{textAlign: "left", fontSize: '100%', marginLeft: "5%", color: "black"}}>{this.props.bathrooms}</b>
+                                </Box>
+
+                            {/* <Stack {...columnProps}>
+                            <p><b>Address:</b> {this.props.address} </p>
+                            <p><b>Contact Name:</b> {this.props.name}</p>
+                            <p><b>Contact Information:</b> {this.props.email}  </p>
+                            <p><b>Rent:</b> {this.props.rent}  </p>
+                            <p><b>Number Of Rooms:</b> {this.props.rooms}  </p>
+                            <p><b>Number Of Bathrooms:</b> {this.props.bathrooms}  </p>
+                        </Stack> */}
+                            {/*<img src={this.props.image} alt="Nothing" style={{width: '24%', height: '19%', boxShadow: '1px 12px 9px #6f6f6f', borderRadius: '6%'}} />*/}
+                        </div>
+                        <PrimaryButton text="More Info" onClick={this.setToTrue} style={{width: '16vh', marginLeft: "35%"}} allowDisabledFocus/>
+                        <Modal
+                            isOpen={this.state.extend}
+                            onDismiss={this.setToTrue}
+                            containerClassName={contentStyles.container}
+                            isBlocking={false}
+                            dragOptions={true}>
+
+                            <div className={contentStyles.header}>
+                                <span>{this.props.description}</span>
+                                <IconButton
+                                    styles={iconButtonStyles}
+                                    iconProps={cancelIcon}
+                                    ariaLabel="Close popup modal"
+                                    onClick={this.setToTrue}
+                                />
+                            </div>
+                            <div className={contentStyles.body}>
+                                <Stack {...columnProps4}>
+                                    <p><b>Address:</b> {this.props.address} </p>
+                                    <p><b>Type of Listing: </b> {this.props.type}</p>
+                                    <p><b>Contact Name:</b> {this.props.name}</p>
+                                    <p><b>Contact Information:</b> {this.props.email}  </p>
+                                    <p><b>Rent:</b> {this.props.rent}  </p>
+                                    <p><b>Number Of Rooms:</b> {this.props.rooms}  </p>
+                                    <p><b>Number Of Bathrooms:</b> {this.props.bathrooms}  </p>
+                                    <p><b>Reserved by: </b> {this.props.reservedBy === "" ? "None" : this.props.reserved}</p>
+                                </Stack>
+                                <img src={this.props.image} alt="Nothing" style={{width: '30%', height: '25%', boxShadow: '1px 12px 9px #6f6f6f', borderRadius: '6%'}} />
+                            </div>
+                            <div className={contentStyles.body}>
+                                <Stack>
+                                    <b>Description: </b>
+                                    <p style={{textAlign: "justify"}}>{this.props.details}</p>
+                                </Stack>
+                            </div>
+                            <Stack horizontal {...columnProps}>
+                                <PrimaryButton text="Edit" onClick={this.openEditModal} style={{width: '16vh', marginLeft: "45%"}} disabled={this.props.userNow[0].email.toLowerCase() !== this.props.email.toLowerCase()}  allowDisabledFocus/>
+                                <PrimaryButton text="Delete" onClick={this.openDeleteModal} style={{width: '16vh'}} disabled={this.props.userNow[0].email.toLowerCase() !== this.props.email.toLowerCase()} allowDisabledFocus/>
+                            </Stack>
+                            <Modal
+                                isOpen={this.state.editModalOpen}
+                                onDismiss={this.openEditModal}
+                                containerClassName={contentStyles.container}
+                                isBlocking={false}
+                                dragOptions={true}>
+                                <div className={contentStyles.header}>
+                                    <span>Edit This Listing</span>
+                                    <IconButton
+                                        styles={iconButtonStyles}
+                                        iconProps={cancelIcon}
+                                        ariaLabel="Close popup modal"
+                                        onClick={this.openEditModal}
+                                    />
+                                </div>
+                                {/*<h1 style={{textAlign: "center"}}>Edit This Listing</h1>*/}
+                                <div style={{display: "flex", justifyContent: "space-evenly", marginLeft: "4%", marginRight: "4%", marginTop: "2%"}}>
+                                    <Stack {...columnProps}>
+                                        <TextField placeholder={this.props.description} label="Name of Listing" autoAdjustHeight id={"descriptionsBox"}/>
+                                        <TextField placeholder={this.props.name} label="Name " id={"namesBox"}/>
+                                        <TextField placeholder={this.props.address} label="Listing Address"  id={"addresssBox"}/>
+                                        <TextField placeholder={this.props.rooms} label="Number Of Rooms" id={"roomsBox"} onGetErrorMessage={value => {
+                                            if(value !== "" && isNaN(parseFloat(value)))
+                                            {
+                                                return "Please enter as a number"
+                                            }
+                                            else if (value.includes(","))
+                                            {
+                                                return "Enter the number without any commas"
+                                            }
+                                        }}/>
+
+                                        <TextField placeholder={this.props.rent} label="Rent" id={"rentsBox"} onGetErrorMessage={value => {
+                                            if( value !== "" && isNaN(parseFloat(value)))
+                                            {
+                                                return "Please enter as a number"
+                                            }
+                                            else if (value.includes(","))
+                                            {
+                                                return "Enter the number without any commas"
+                                            }
+                                        }}/>
+                                        <TextField placeholder={this.props.details} label="Short Paragraph for Details" autoAdjustHeight id={"detailsBox"}/>
+                                        <TextField placeholder={this.props.bathrooms} label="Number Of Bathrooms" id={"bathroomsBox"} onGetErrorMessage={value => {
+                                            if(value !== "" && isNaN(parseFloat(value)))
+                                            {
+                                                return "Please enter as a number"
+                                            }
+                                            else if (value.includes(","))
+                                            {
+                                                return "Enter the number without any commas"
+                                            }
+                                        }}/>
+                                        <Dropdown
+                                            placeholder="Select Type"
+                                            label="Type of Listing"
+                                            selectedKey={this.state.typeKey}
+                                            // eslint-disable-next-line react/jsx-no-bind
+                                            onChange={this.onChangeSelect}
+                                            options={typeProps}
+                                            styles={dropdownStyles}
+                                        />
+                                    </Stack>
+                                </div>
+                                {/*<div>*/}
+                                {/*<PrimaryButton onClick={this.handleOpen.bind(this)}>*/}
+                                {/*    Add Image*/}
+                                {/*</PrimaryButton>*/}
+                                {/*<DropzoneDialog*/}
+                                {/*    open={this.state.open}*/}
+                                {/*    onSave={this.handleSave.bind(this)}*/}
+                                {/*    acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}*/}
+                                {/*    showPreviews={true}*/}
+                                {/*    maxFileSize={5000000}*/}
+                                {/*    onClose={this.handleClose.bind(this)}*/}
+                                {/*/>*/}
+                                {/*</div>*/}
+                                <Stack horizontal {...columnProps2}>
+                                    <DefaultButton text="Cancel" onClick={this.openEditModal}/>
+                                    <PrimaryButton text="Confirm" onClick={this.editListing} style={{width: '16vh'}} allowDisabledFocus/>
+                                </Stack>
+                            </Modal>
+
+
+                            <Modal
+                                isOpen={this.state.deleteModalOpen}
+                                onDismiss={this.openDeleteModal}
+                                containerClassName={contentStyles.container}
+                                isBlocking={false}
+                                dragOptions={true}>
+
+                                <div className={contentStyles.header}>
+                                    <span>Delete This Listing</span>
+                                    <IconButton
+                                        styles={iconButtonStyles}
+                                        iconProps={cancelIcon}
+                                        ariaLabel="Close popup modal"
+                                        onClick={this.openDeleteModal}
+                                    />
+                                </div>
+                                <div className={contentStyles.body}>
+                                    <h3> Are you sure you want to delete this listing?</h3>
+                                </div>
+                                <Stack horizontal {...columnProps3}>
+                                    <DefaultButton text="Cancel" onClick={this.openDeleteModal}/>
+                                    <PrimaryButton text="Delete" onClick={this.deleteListing} style={{width: '16vh'}} allowDisabledFocus/>
+                                </Stack>
+                            </Modal>
+                        </Modal>
+                    </Box>
+                </>)}
             </>
         );
     }

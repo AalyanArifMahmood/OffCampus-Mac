@@ -6,9 +6,9 @@ import {GoogleAuthProvider,
 getAuth,
  signInWithRedirect}
 from "firebase/auth";
-import SingleList from "../Listings/SingleListingDisplay";
+import SingleList3 from "../Listings/SingleListingDisplay3";
 import SingleList2 from "../Listings/SingleListingDisplay2";
-import {IStackProps, Stack} from '@fluentui/react/lib/Stack';
+import {IStackProps} from '@fluentui/react/lib/Stack';
 
 // import {getFirestore, query, getDocs, collection, where, addDoc,} from "firebase/firestore";
 
@@ -182,17 +182,23 @@ class Profile extends React.Component
                                 </div>
                                 <br/>
 
-                                <div style={{textAlign: "center", display: "flex", justifyContent: "space-around"}}>
-                                    <PrimaryButton text="Show Your Listings" onClick={this.enable} allowDisabledFocus/>
-                                    <PrimaryButton text="Hide Your Reserved Listings" onClick={this.enableReserve} allowDisabledFocus/>
-                                </div>
+                                {this.state.matches && (
+                                    <div style={{textAlign: "center", display: "flex", justifyContent: "space-around"}}>
+                                        <PrimaryButton text="Show Your Listings" onClick={this.enable} allowDisabledFocus/>
+                                        <PrimaryButton text="Hide Reserved Listings" onClick={this.enableReserve} allowDisabledFocus/>
+                                    </div>)}
+                                {!this.state.matches && (
+                                    <div style={{textAlign: "center", display: "flex", marginLeft: "29%"}}>
+                                        <PrimaryButton style={{width: "15%"}} text="Your Listings" onClick={this.enable} allowDisabledFocus/>
+                                        <PrimaryButton style={{width: "15%", marginLeft: "10%"}} text="Hide Listings" onClick={this.enableReserve} allowDisabledFocus/>
+                                    </div>)}
 
                             </div>
                             <ul>
                                 {this.state.myReserved[0].map((data) => (
 
                                     <li key={data.address}>
-                                        <SingleList description={data.description} name={data.name} address={data.address} email={data.email} rent={data.rent} image={data.photo} details={data.details} rooms={data.numberRooms} bathrooms={data.numberBathrooms}  userNow={this.props.userNow} type={data.listingType}/>
+                                        <SingleList3 description={data.description} name={data.name} address={data.address} email={data.email} rent={data.rent} image={data.photo} details={data.details} rooms={data.numberRooms} bathrooms={data.numberBathrooms}  userNow={this.props.userNow} type={data.listingType}/>
                                     </li>
                                 ))}
                             </ul>
@@ -248,10 +254,16 @@ class Profile extends React.Component
                                 <img src={photoUrl1} alt={"none"} style={{width: "30vh", height: "30vh", borderRadius: "100%"}}/>
                             </div>
                             <br/>
-                            <div style={{textAlign: "center", display: "flex", justifyContent: "space-around"}}>
-                                <PrimaryButton text="Hide Your Listings" onClick={this.enable} allowDisabledFocus/>
-                                <PrimaryButton text="Show Your Reserved Listings" onClick={this.enableReserve} allowDisabledFocus/>
-                            </div>
+                            {this.state.matches && (
+                                <div style={{textAlign: "center", display: "flex", justifyContent: "space-around"}}>
+                                    <PrimaryButton text="Hide Your Listings" onClick={this.enable} allowDisabledFocus/>
+                                    <PrimaryButton text="Show Your Reserved Listings" onClick={this.enableReserve} allowDisabledFocus/>
+                                </div>)}
+                            {!this.state.matches && (
+                                <div style={{textAlign: "center", display: "flex", marginLeft: "29%"}}>
+                                    <PrimaryButton style={{width: "15%"}} text="Hide Listings" onClick={this.enable} allowDisabledFocus/>
+                                    <PrimaryButton style={{width: "15%", marginLeft: "10%"}} text="Reserved Listings" onClick={this.enableReserve} allowDisabledFocus/>
+                                </div>)}
                         </div>
                         <ul>
                             {this.state.myListings[0].map((data) => (
