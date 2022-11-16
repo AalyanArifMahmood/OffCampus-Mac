@@ -483,7 +483,7 @@ class SingleList2 extends React.Component
 
                             {this.props.reserved !== "None" && (
                                 <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
-                                    <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "red"}}>{this.props.reserved}</b>
+                                    <b style={{textAlign: "left", fontSize: '90%', marginLeft: "1%", color: "red"}}>{this.props.reserved}</b>
                                 </div>)}
 
                             <br/>
