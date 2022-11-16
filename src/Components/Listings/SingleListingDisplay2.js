@@ -273,6 +273,11 @@ class SingleList2 extends React.Component
                             <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "grey"}}>{this.props.email}</b>
                         </div>
 
+                        {this.props.reserved !== "None" && (
+                            <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
+                            <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "red"}}>{this.props.reserved}</b>
+                        </div>)}
+
                         <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
 
                             <Box bgcolor="white" p={1} border={2} marginRight={0} marginLeft={10} marginBottom = {10} marginTop = {5} color = "#3792cd" style={{textAlign: "center", maxHeight: "7vh", borderRadius: "30%"}}>
@@ -329,7 +334,7 @@ class SingleList2 extends React.Component
                                     <p><b>Rent:</b> {this.props.rent}  </p>
                                     <p><b>Number Of Rooms:</b> {this.props.rooms}  </p>
                                     <p><b>Number Of Bathrooms:</b> {this.props.bathrooms}  </p>
-                                    <p><b>Reserved by: </b> {this.props.reservedBy === "" ? "None" : this.props.reserved}</p>
+                                    {this.props.reserved !== "None" && (<p><b>Reserved by: </b> {this.props.reserved}</p>)}
                                 </Stack>
                                 <img src={this.props.image} alt="Nothing" style={{width: '30%', height: '25%', boxShadow: '1px 12px 9px #6f6f6f', borderRadius: '6%'}} />
                             </div>

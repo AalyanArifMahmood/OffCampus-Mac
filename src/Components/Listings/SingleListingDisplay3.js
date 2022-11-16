@@ -103,7 +103,8 @@ class SingleList3 extends React.Component
             {
                 extend: false,
                 modalOpen: false,
-                matches: window.matchMedia("(min-width: 680px)").matches
+                matches: window.matchMedia("(min-width: 680px)").matches,
+                modalOpenUnreserve: false
             }
 
     }
@@ -151,6 +152,33 @@ class SingleList3 extends React.Component
     setToTrue = () =>
     {
         this.setState(prevState => ({extend: !prevState.extend}));
+    }
+
+    openReserveModal = () =>
+    {
+        this.setState(prevState => ({modalOpenUnreserve: !prevState.modalOpenUnreserve}));
+    }
+
+    Unreserve = () =>
+    {
+
+        set(ref(database, 'items/' + this.props.address), {
+            description: this.props.description,
+            name: this.props.name,
+            email: this.props.email,
+            address: this.props.address,
+            rent: this.props.rent,
+            photo: this.props.image,
+            details: this.props.details,
+            numberRooms: this.props.rooms,
+            numberBathrooms: this.props.bathrooms,
+            listingType: this.props.type,
+            reservedBy: "None"
+        }).then(() =>
+        {
+            alert("You have successfully unreserved this Listing. Please refresh page to see changes")
+            this.openReserveModal();
+        });
     }
 
     render()
@@ -209,8 +237,33 @@ class SingleList3 extends React.Component
                                 <img src={this.props.image} alt="Nothing" style={{width: '35%', height: '25%', boxShadow: '1px 12px 9px #6f6f6f', borderRadius: '6%'}} />
                             </div>
                             <Stack horizontal {...columnProps2}>
-                                <PrimaryButton text="More Info" onClick={this.setToTrue} style={{width: '25vh', marginLeft: "47%"}} allowDisabledFocus/>
+                                <PrimaryButton text="More Info" onClick={this.setToTrue} style={{width: '25vh', marginLeft: "47%", minWidth: "15vh"}} allowDisabledFocus/>
+                                <PrimaryButton text="Unreserve" onClick={this.openReserveModal} style={{width: '25vh', marginLeft: "47%", minWidth: "15vh"}} allowDisabledFocus/>
                             </Stack>
+                            <Modal
+                                isOpen={this.state.modalOpenUnreserve}
+                                onDismiss={this.openReserveModal}
+                                containerClassName={contentStyles.container}
+                                isBlocking={false}
+                                dragOptions={true}>
+
+                                <div className={contentStyles.header}>
+                                    <span>Unreserve This Listing</span>
+                                    <IconButton
+                                        styles={iconButtonStyles}
+                                        iconProps={cancelIcon}
+                                        ariaLabel="Close popup modal"
+                                        onClick={this.openReserveModal}
+                                    />
+                                </div>
+                                <div className={contentStyles.body}>
+                                    <h3> Confirm Action?</h3>
+                                </div>
+                                <Stack horizontal {...columnProps3}>
+                                    <DefaultButton text="Cancel" onClick={this.openReserveModal}/>
+                                    <PrimaryButton text="Confirm" onClick={this.Unreserve} style={{width: '16vh'}} allowDisabledFocus/>
+                                </Stack>
+                            </Modal>
 
                             <Modal
                                 isOpen={this.state.extend}
@@ -314,7 +367,33 @@ class SingleList3 extends React.Component
                             </div>
                             <Stack horizontal {...columnPropsPhone}>
                                 <PrimaryButton text="More Info" onClick={this.setToTrue} style={{width: '25vh', marginLeft: "100%"}} allowDisabledFocus/>
+                                <PrimaryButton text="Unreserve" onClick={this.openReserveModal} style={{width: '25vh', marginLeft: "13%"}} allowDisabledFocus/>
                             </Stack>
+                            <Modal
+                                isOpen={this.state.modalOpenUnreserve}
+                                onDismiss={this.openReserveModal}
+                                containerClassName={contentStyles.container}
+                                isBlocking={false}
+                                dragOptions={true}>
+
+                                <div className={contentStyles.header}>
+                                    <span>Unreserve This Listing</span>
+                                    <IconButton
+                                        styles={iconButtonStyles}
+                                        iconProps={cancelIcon}
+                                        ariaLabel="Close popup modal"
+                                        onClick={this.openReserveModal}
+                                    />
+                                </div>
+                                <div className={contentStyles.body}>
+                                    <h3> Confirm Action?</h3>
+                                </div>
+                                <Stack horizontal {...columnProps3}>
+                                    <DefaultButton text="Cancel" onClick={this.openReserveModal}/>
+                                    <PrimaryButton text="Confirm" onClick={this.Unreserve} style={{width: '16vh'}} allowDisabledFocus/>
+                                </Stack>
+                            </Modal>
+
                             <Modal
                                 isOpen={this.state.extend}
                                 onDismiss={this.setToTrue}
