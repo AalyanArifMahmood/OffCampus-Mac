@@ -480,6 +480,12 @@ class SingleList2 extends React.Component
                             <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
                                 <b style={{textAlign: "left", fontSize: '90%', marginLeft: "1%", color: "grey"}}>{this.props.email}</b>
                             </div>
+
+                            {this.props.reserved !== "None" && (
+                                <div style={{justifyContent: "space-between", display: "flex", fontSize: '2vh'}}>
+                                    <b style={{textAlign: "left", fontSize: '120%', marginLeft: "1%", color: "red"}}>{this.props.reserved}</b>
+                                </div>)}
+
                             <br/>
                             <div style={{justifyContent: "space-between", display: "flex"}}>
                                 <p>
