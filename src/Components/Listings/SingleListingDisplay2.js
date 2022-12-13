@@ -184,7 +184,7 @@ class SingleList2 extends React.Component
             let newDetails = document.getElementById("detailsBox").value === "" ? this.props.details : document.getElementById("detailsBox").value;
             let newBathRooms = document.getElementById("bathroomsBox").value === "" ? this.props.bathrooms : document.getElementById("bathroomsBox").value;
             let newKey = this.state.typeKey === "" ? this.props.type : this.state.typeText
-            if (!isNaN(parseFloat(newRent)) && !isNaN(parseFloat(newRooms)) && !isNaN(parseFloat(newBathRooms)) && !(newRent.includes(",")))
+            if (!isNaN(Number(newRent)) && !isNaN(Number(newRooms)) && !isNaN(Number(newBathRooms)) && !(newRent.includes(",")) && !(Number(newRooms) > 100) && !(Number(newRooms) < 0) && !(Number(newBathRooms) > 100) && !(Number(newBathRooms) < 0)&& !(Number(newRent) > 100000) && !(Number(newRent) < 0))
             {
                 set(ref(database, 'items/' + newAddress), {
                     description:  newDescription,
@@ -370,7 +370,7 @@ class SingleList2 extends React.Component
                                         <TextField placeholder={this.props.name} label="Name " id={"namesBox"}/>
                                         <TextField placeholder={this.props.address} label="Listing Address"  id={"addresssBox"}/>
                                         <TextField placeholder={this.props.rooms} label="Number Of Rooms" id={"roomsBox"} onGetErrorMessage={value => {
-                                            if(value !== "" && isNaN(parseFloat(value)))
+                                            if(value !== "" && isNaN(Number(value)))
                                             {
                                                 return "Please enter as a number"
                                             }
@@ -382,7 +382,7 @@ class SingleList2 extends React.Component
                                     </Stack>
                                     <Stack {...columnProps}>
                                         <TextField placeholder={this.props.rent} label="Rent" id={"rentsBox"} onGetErrorMessage={value => {
-                                            if( value !== "" && isNaN(parseFloat(value)))
+                                            if( value !== "" && isNaN(Number(value)))
                                             {
                                                 return "Please enter as a number"
                                             }
@@ -393,7 +393,7 @@ class SingleList2 extends React.Component
                                         }}/>
                                         <TextField placeholder={this.props.details} label="Short Paragraph for Details" autoAdjustHeight id={"detailsBox"}/>
                                         <TextField placeholder={this.props.bathrooms} label="Number Of Bathrooms" id={"bathroomsBox"} onGetErrorMessage={value => {
-                                            if(value !== "" && isNaN(parseFloat(value)))
+                                            if(value !== "" && isNaN(Number(value)))
                                             {
                                                 return "Please enter as a number"
                                             }
@@ -588,7 +588,7 @@ class SingleList2 extends React.Component
                                         <TextField placeholder={this.props.name} label="Name " id={"namesBox"}/>
                                         <TextField placeholder={this.props.address} label="Listing Address"  id={"addresssBox"}/>
                                         <TextField placeholder={this.props.rooms} label="Number Of Rooms" id={"roomsBox"} onGetErrorMessage={value => {
-                                            if(value !== "" && isNaN(parseFloat(value)))
+                                            if(value !== "" && isNaN(Number(value)))
                                             {
                                                 return "Please enter as a number"
                                             }
@@ -599,7 +599,7 @@ class SingleList2 extends React.Component
                                         }}/>
 
                                         <TextField placeholder={this.props.rent} label="Rent" id={"rentsBox"} onGetErrorMessage={value => {
-                                            if( value !== "" && isNaN(parseFloat(value)))
+                                            if( value !== "" && isNaN(Number(value)))
                                             {
                                                 return "Please enter as a number"
                                             }
@@ -610,7 +610,7 @@ class SingleList2 extends React.Component
                                         }}/>
                                         <TextField placeholder={this.props.details} label="Short Paragraph for Details" autoAdjustHeight id={"detailsBox"}/>
                                         <TextField placeholder={this.props.bathrooms} label="Number Of Bathrooms" id={"bathroomsBox"} onGetErrorMessage={value => {
-                                            if(value !== "" && isNaN(parseFloat(value)))
+                                            if(value !== "" && isNaN(Number(value)))
                                             {
                                                 return "Please enter as a number"
                                             }

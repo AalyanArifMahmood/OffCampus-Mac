@@ -217,7 +217,7 @@ class AddListings extends React.Component
             this.setState(prevState => ({
                 showListings: [prevState.showListings[0].sort(function (a, b)
                     {
-                        return parseFloat(a.rent) - parseFloat(b.rent);
+                        return Number(a.rent) - Number(b.rent);
                     }
                 )]
             }))
@@ -229,7 +229,7 @@ class AddListings extends React.Component
                     {
                         console.log(a.rent)
                         console.log(b.rent)
-                        return parseFloat(b.rent) - parseFloat(a.rent);
+                        return Number(b.rent) - Number(a.rent);
                     }
                 )]
             }))
@@ -288,7 +288,7 @@ class AddListings extends React.Component
                     this.setState(prevState => ({
                         showListings: [prevState.showListings[0].filter(function (el)
                             {
-                                return parseFloat(el.numberRooms) === 1;
+                                return Number(el.numberRooms) === 1;
                             }
                         )]
                     }))
@@ -298,7 +298,7 @@ class AddListings extends React.Component
                     this.setState(prevState => ({
                         showListings: [prevState.showListings[0].filter(function (el)
                             {
-                                return parseFloat(el.numberRooms) >= 2;
+                                return Number(el.numberRooms) >= 2;
                             }
                         )]
                     }))
@@ -308,7 +308,7 @@ class AddListings extends React.Component
                     this.setState(prevState => ({
                         showListings: [prevState.showListings[0].filter(function (el)
                             {
-                                return parseFloat(el.numberRooms) >= 3;
+                                return Number(el.numberRooms) >= 3;
                             }
                         )]
                     }))
@@ -319,7 +319,7 @@ class AddListings extends React.Component
                     this.setState(prevState => ({
                         showListings: [prevState.showListings[0].filter(function (el)
                             {
-                                return parseFloat(el.numberBathrooms) === 1;
+                                return Number(el.numberBathrooms) === 1;
                             }
                         )]
                     }))
@@ -329,7 +329,7 @@ class AddListings extends React.Component
                     this.setState(prevState => ({
                         showListings: [prevState.showListings[0].filter(function (el)
                             {
-                                return parseFloat(el.numberBathrooms) >= 2;
+                                return Number(el.numberBathrooms) >= 2;
                             }
                         )]
                     }))
@@ -339,7 +339,7 @@ class AddListings extends React.Component
                     this.setState(prevState => ({
                         showListings: [prevState.showListings[0].filter(function (el)
                             {
-                                return parseFloat(el.numberBathrooms) >= 3;
+                                return Number(el.numberBathrooms) >= 3;
                             }
                         )]
                     }))
@@ -405,10 +405,10 @@ class AddListings extends React.Component
     writeUserData = () =>
     {
         if (!(document.getElementById("addressBox").value === "") && !(document.getElementById("nameBox").value === "") &&
-            !(document.getElementById("rentBox").value === "") && !(isNaN(parseFloat(document.getElementById("rentBox").value)))
-            && !(document.getElementById("rentBox").value.includes(",")) && !(document.getElementById("bathroomBox").value === "")
-            && !(document.getElementById("roomBox").value === "") && !(isNaN(parseFloat(document.getElementById("bathroomBox").value)))
-            && !(isNaN(parseFloat(document.getElementById("roomBox").value))) && !(this.state.typeKey === "")
+            !(document.getElementById("rentBox").value === "") && !(isNaN(Number(document.getElementById("rentBox").value)))
+            && !(document.getElementById("rentBox").value.includes(",")) && !(Number(document.getElementById("rentBox").value) > 100000) && !(Number(document.getElementById("rentBox").value) < 0) && !(document.getElementById("bathroomBox").value === "")
+            && !(document.getElementById("roomBox").value === "") && !(isNaN(Number(document.getElementById("bathroomBox").value)))
+            && !(isNaN(Number(document.getElementById("roomBox").value))) && !(this.state.typeKey === "") && !(Number(document.getElementById("roomBox").value) > 100) && !(Number(document.getElementById("roomBox").value) < 0) && !(Number(document.getElementById("bathroomBox").value) > 100) && !(Number(document.getElementById("bathroomBox").value) < 0)
             && !(document.getElementById("detailBox").value === "")  && !(document.getElementById("descriptionBox").value === "") && !(this.state.files.length === 0))
         {
             if(this.state.listAddresses[0].includes(document.getElementById("addressBox").value.toLowerCase()))
@@ -540,7 +540,7 @@ class AddListings extends React.Component
                                  if (value==="") {
                                      return 'This field is required';
                                  }
-                                 else if(isNaN(parseFloat(value)))
+                                 else if(isNaN(Number(value)))
                                  {
                                      return "Please enter as a number"
                                  }
@@ -555,7 +555,7 @@ class AddListings extends React.Component
                                  if (value==="") {
                                      return 'This field is required';
                                  }
-                                 else if(isNaN(parseFloat(value)))
+                                 else if(isNaN(Number(value)))
                                  {
                                      return "Please enter as a number"
                                  }
@@ -573,7 +573,7 @@ class AddListings extends React.Component
                                  if (value==="") {
                                      return 'This field is required';
                                  }
-                                 else if(isNaN(parseFloat(value)))
+                                 else if(isNaN(Number(value)))
                                  {
                                      return "Please enter as a number"
                                  }
@@ -617,7 +617,7 @@ class AddListings extends React.Component
                                  if (value==="") {
                                      return 'This field is required';
                                  }
-                                 else if(isNaN(parseFloat(value)))
+                                 else if(isNaN(Number(value)))
                                  {
                                      return "Please enter as a number"
                                  }
@@ -631,7 +631,7 @@ class AddListings extends React.Component
                                  if (value==="") {
                                      return 'This field is required';
                                  }
-                                 else if(isNaN(parseFloat(value)))
+                                 else if(isNaN(Number(value)))
                                  {
                                      return "Please enter as a number"
                                  }
@@ -649,7 +649,7 @@ class AddListings extends React.Component
                                  if (value==="") {
                                      return 'This field is required';
                                  }
-                                 else if(isNaN(parseFloat(value)))
+                                 else if(isNaN(Number(value)))
                                  {
                                      return "Please enter as a number"
                                  }
@@ -842,7 +842,7 @@ class AddListings extends React.Component
                                     if (value==="") {
                                         return 'This field is required';
                                     }
-                                    else if(isNaN(parseFloat(value)))
+                                    else if(isNaN(Number(value)))
                                     {
                                         return "Please enter as a number"
                                     }
@@ -857,7 +857,7 @@ class AddListings extends React.Component
                                     if (value==="") {
                                         return 'This field is required';
                                     }
-                                    else if(isNaN(parseFloat(value)))
+                                    else if(isNaN(Number(value)))
                                     {
                                         return "Please enter as a number"
                                     }
@@ -875,7 +875,7 @@ class AddListings extends React.Component
                                     if (value==="") {
                                         return 'This field is required';
                                     }
-                                    else if(isNaN(parseFloat(value)))
+                                    else if(isNaN(Number(value)))
                                     {
                                         return "Please enter as a number"
                                     }
@@ -919,7 +919,7 @@ class AddListings extends React.Component
                                     if (value==="") {
                                         return 'This field is required';
                                     }
-                                    else if(isNaN(parseFloat(value)))
+                                    else if(isNaN(Number(value)))
                                     {
                                         return "Please enter as a number"
                                     }
@@ -933,7 +933,7 @@ class AddListings extends React.Component
                                     if (value==="") {
                                         return 'This field is required';
                                     }
-                                    else if(isNaN(parseFloat(value)))
+                                    else if(isNaN(Number(value)))
                                     {
                                         return "Please enter as a number"
                                     }
@@ -951,7 +951,7 @@ class AddListings extends React.Component
                                     if (value==="") {
                                         return 'This field is required';
                                     }
-                                    else if(isNaN(parseFloat(value)))
+                                    else if(isNaN(Number(value)))
                                     {
                                         return "Please enter as a number"
                                     }
