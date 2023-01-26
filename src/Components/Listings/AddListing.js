@@ -25,7 +25,7 @@ const firebaseConfig = {
 
 
 
-// ***********************************************  FILTER SECTION  ****************************************************
+// **********************************************  FILTER SECTION  ***************************************************
 
 
 const dropdownStyles: Partial<IDropdownStyles> = { dropdown: { width: 300 } };
@@ -142,7 +142,6 @@ const menuProps = [
 
 // ********************************************  FILTER SECTION END ****************************************************
 
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
@@ -173,7 +172,7 @@ function makeid(length) {
     return result;
 }
 
-// **************************************   This is where the class starts   *******************************************
+// *************************************   This is where the class starts   ******************************************
 class AddListings extends React.Component
 {
     constructor() {
